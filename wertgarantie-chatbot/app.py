@@ -1,11 +1,3 @@
-
-import os
-import requests
-from bs4 import BeautifulSoup
-import streamlit as st
-from llama_index import SimpleDirectoryReader, ServiceContext, GPTVectorStoreIndex
-from llama_index.llms import OpenAI
-
 # 在代码中自动安装必要的包
 def install_packages():
     required_packages = [
@@ -18,6 +10,13 @@ def install_packages():
     subprocess.check_call([sys.executable, "-m", "pip", "install"] + required_packages)
 
 install_packages()
+import os
+import requests
+from bs4 import BeautifulSoup
+import streamlit as st
+from llama_index import SimpleDirectoryReader, ServiceContext, GPTVectorStoreIndex
+from llama_index.llms import OpenAI
+
 
 # 配置 OpenAI API Key
 openai.api_key = os.getenv("OPENAI_API_KEY")
