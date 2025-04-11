@@ -4,12 +4,11 @@ st.set_page_config(page_title="Wertgarantie Chatbot", layout="wide")
 import os
 import faiss
 import numpy as np
-from openai import OpenAI
+from openai import
 from sentence_transformers import SentenceTransformer
 
-# ---------------------------
-# 1. 文档向量初始化
-# ---------------------------
+openai.api_key = st.secrets["OPENROUTER_API_KEY"]
+openai.api_base = "https://openrouter.ai/api/v1"
 @st.cache_resource
 def init_vector_store():
     with open("wertgarantie.txt", "r", encoding="utf-8") as f:
