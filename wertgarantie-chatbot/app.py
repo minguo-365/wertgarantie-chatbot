@@ -6,6 +6,19 @@ import streamlit as st
 from llama_index import SimpleDirectoryReader, ServiceContext, GPTVectorStoreIndex
 from llama_index.llms import OpenAI
 
+# 在代码中自动安装必要的包
+def install_packages():
+    required_packages = [
+        'llama_index', 
+        'openai', 
+        'beautifulsoup4', 
+        'requests', 
+        'streamlit'
+    ]
+    subprocess.check_call([sys.executable, "-m", "pip", "install"] + required_packages)
+
+install_packages()
+
 # 配置 OpenAI API Key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
