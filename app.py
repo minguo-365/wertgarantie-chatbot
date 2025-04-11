@@ -1,6 +1,6 @@
-# wertgarantie_chatbot.py
-
 import streamlit as st
+st.set_page_config(page_title="Wertgarantie Chatbot", layout="wide")
+
 import os
 import faiss
 import numpy as np
@@ -10,7 +10,7 @@ from sentence_transformers import SentenceTransformer
 # ---------------------------
 # 1. 文档向量初始化
 # ---------------------------
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 def init_vector_store():
     with open("wertgarantie.txt", "r", encoding="utf-8") as f:
         text = f.read()
@@ -29,9 +29,8 @@ def get_relevant_chunks(query, k=3):
     return [chunks[i] for i in I[0]]
 
 # ---------------------------
-# 2. 页面配置 & 样式
+# 2. 页面样式
 # ---------------------------
-st.set_page_config(page_title="Wertgarantie Chatbot", layout="wide")
 st.image("https://raw.githubusercontent.com/你的用户名/你的仓库名/main/wertgarantie_logo.png", width=160)
 st.markdown("""
 <div style='text-align: center; margin-top: -30px;'>
