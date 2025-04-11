@@ -1,39 +1,61 @@
-import streamlit as st
-import os
-import openai
-from llama_index.core import (
-    SimpleDirectoryReader,
-    StorageContext,
-    load_index_from_storage,
-    VectorStoreIndex,
-)
-from llama_index.llms.openai import OpenAI
-from llama_index.core.service_context import ServiceContext
 
-# 【配置 API Key 】
+import os
+import requests
+from bs4 import BeautifulSoup
+import streamlit as st
+from llama_index import SimpleDirectoryReader, ServiceContext, GPTVectorStoreIndex
+from llama_index.llms import OpenAI
+
+# 配置 OpenAI API Key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# 【数据读取和索引】
-docs = SimpleDirectoryReader("data").load_data()
-llm = OpenAI(model="gpt-3.5-turbo")
-service_context = ServiceContext.from_defaults(llm=llm)
-index = VectorStoreIndex.from_documents(docs, service_context=service_context)
+# 设置爬取数据的文件路径
+file_path = "/Users/YourUsername/Documents/wertgarantie-chatbot/data/wertgarantie.txt"  # 请替换为你的用户目录
 
-# 【设置 Streamlit UI 】
+# 创建文件夹（如果不存在）
+os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+# 网页爬取
+url = "https://www.wertgarantie.de"
+response = requests.get(url)
+soup = BeautifulSoup(response.text, "html.parser")
+
+# 获取网页文本内容
+text = soup.get_text()
+
+# 保存为文本文件
+with open(file_path, "w", encoding="utf-8") as f:
+    f.write(text)
+
+# 输出文件保存路径
+st.write(f"文件已保存到： {file_path}")
+
+# 加载爬取的数据
+docs = SimpleDirectoryReader("data").load_data()
+
+# 设置 OpenAI LLM 模型
+llm = OpenAI(model="gpt-3.5-turbo")
+
+# 创建服务上下文
+service_context = ServiceContext.from_defaults(llm=llm)
+
+# 创建索引
+index = GPTVectorStoreIndex.from_documents(docs, service_context=service_context)
+
+# 创建流式界面
 st.set_page_config(page_title="Wertgarantie Chatbot", layout="wide")
 
 st.markdown("""
-    <h1 style='text-align: center;'>🧑‍💻 Wertgarantie 智能客服助手</h1>
+    <h1 style='text-align: center;'>🤖 Wertgarantie 智能客服助手</h1>
     <p style='text-align: center;'>
-        培训自 Wertgarantie 网站的内容，支持中文和德语对话 🇩🇪 🇹🇼
+    培训自 Wertgarantie 网站的内容，支持中文和德语对话 🇩🇪 🇨🇳
     </p>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-# 【输入窗口】
-user_input = st.text_input("请输入您的问题：")
+# 用户输入框
+user_input = st.text_input("请输入您的问题:")
 
-# 【处理回复】
 if user_input:
-    query_engine = index.as_query_engine()
-    response = query_engine.query(user_input)
-    st.markdown(f"**答复：** {response.response}")
+    response = index.query(user_input)
+    st.write(f"答复: {response}")
+
