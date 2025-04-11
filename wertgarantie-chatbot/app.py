@@ -1,4 +1,4 @@
-pip install llama_index openai beautifulsoup4 requests streamlit
+
 import os
 import requests
 from bs4 import BeautifulSoup
