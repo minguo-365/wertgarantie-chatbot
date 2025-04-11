@@ -6,7 +6,7 @@ from llama_index.core import (
     load_index_from_storage,
     VectorStoreIndex,
 )
-from llama_index.llms import OpenAI
+from llama_index.llms.openai import OpenAI
 from llama_index.core.service_context import ServiceContext
 
 # 【配置 API Key 】
