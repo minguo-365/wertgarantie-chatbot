@@ -1,5 +1,5 @@
-llama_index
-openai
-beautifulsoup4
-requests
 streamlit
+openai
+sentence-transformers
+faiss-cpu
+numpy
