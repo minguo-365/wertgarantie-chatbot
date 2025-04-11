@@ -1,62 +1,107 @@
+# wertgarantie_chatbot.py
 
-import os
-import requests
-from bs4 import BeautifulSoup
 import streamlit as st
-from llama_index import SimpleDirectoryReader, ServiceContext, GPTVectorStoreIndex
-from llama_index.llms import OpenAI
+import os
+import faiss
+import numpy as np
+from openai import OpenAI
+from sentence_transformers import SentenceTransformer
+
+# ---------------------------
+# 1. 文档向量初始化
+# ---------------------------
+@st.cache_resource
+def init_vector_store():
+    with open("wertgarantie.txt", "r", encoding="utf-8") as f:
+        text = f.read()
+    chunks = [chunk.strip() for chunk in text.split("\n\n") if len(chunk.strip()) > 50]
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    embeddings = model.encode(chunks, show_progress_bar=True)
+    index = faiss.IndexFlatL2(embeddings.shape[1])
+    index.add(np.array(embeddings))
+    return model, chunks, index, embeddings
+
+model, chunks, index, _ = init_vector_store()
 
 
-# 配置 OpenAI API Key
-openai.api_key = os.getenv("OPENAI_API_KEY")
+def get_relevant_chunks(query, k=3):
+    query_vec = model.encode([query])
+    D, I = index.search(np.array(query_vec), k)
+    return [chunks[i] for i in I[0]]
 
-# 设置爬取数据的文件路径
-file_path = "/Users/YourUsername/Documents/wertgarantie-chatbot/data/wertgarantie.txt"  # 请替换为你的用户目录
-
-# 创建文件夹（如果不存在）
-os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-# 网页爬取
-url = "https://www.wertgarantie.de"
-response = requests.get(url)
-soup = BeautifulSoup(response.text, "html.parser")
-
-# 获取网页文本内容
-text = soup.get_text()
-
-# 保存为文本文件
-with open(file_path, "w", encoding="utf-8") as f:
-    f.write(text)
-
-# 输出文件保存路径
-st.write(f"文件已保存到： {file_path}")
-
-# 加载爬取的数据
-docs = SimpleDirectoryReader("data").load_data()
-
-# 设置 OpenAI LLM 模型
-llm = OpenAI(model="gpt-3.5-turbo")
-
-# 创建服务上下文
-service_context = ServiceContext.from_defaults(llm=llm)
-
-# 创建索引
-index = GPTVectorStoreIndex.from_documents(docs, service_context=service_context)
-
-# 创建流式界面
+# ---------------------------
+# 2. 页面配置 & 样式
+# ---------------------------
 st.set_page_config(page_title="Wertgarantie Chatbot", layout="wide")
+st.image("https://raw.githubusercontent.com/你的用户名/你的仓库名/main/wertgarantie_logo.png", width=160)
+st.markdown("""
+<div style='text-align: center; margin-top: -30px;'>
+    <h1>🤖 Willkommen</h1>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("""
-    <h1 style='text-align: center;'>🤖 Wertgarantie 智能客服助手</h1>
-    <p style='text-align: center;'>
-    培训自 Wertgarantie 网站的内容，支持中文和德语对话 🇩🇪 🇨🇳
-    </p>
-    """, unsafe_allow_html=True)
+<style>
+    .stTextInput > div > div > input {
+        border-radius: 10px;
+        font-size: 18px;
+        padding: 10px;
+    }
+    .stMarkdown {
+        font-size: 17px;
+        line-height: 1.6;
+    }
+    .block-container {
+        padding-top: 1.5rem;
+        padding-bottom: 2rem;
+    }
+</style>
+""", unsafe_allow_html=True)
 
-# 用户输入框
-user_input = st.text_input("请输入您的问题:")
+# ---------------------------
+# 3. 初始化 OpenAI & 聊天记录
+# ---------------------------
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+if "messages" not in st.session_state:
+    st.session_state.messages = [
+        {"role": "system", "content": "你是一个专业客服助手，可以结合公司提供的文档来回答客户的问题。"}
+    ]
+
+for msg in st.session_state.messages:
+    if msg["role"] != "system":
+        st.chat_message(msg["role"]).markdown(msg["content"])
+
+# ---------------------------
+# 4. 用户输入 & 回答生成
+# ---------------------------
+user_input = st.chat_input("Bitte geben Sie Ihre Frage ein")
 
 if user_input:
-    response = index.query(user_input)
-    st.write(f"答复: {response}")
+    st.chat_message("user").markdown(user_input)
+    st.session_state.messages.append({"role": "user", "content": user_input})
+
+    try:
+        context_chunks = get_relevant_chunks(user_input)
+        context = "\n\n".join(context_chunks)
+        prompt = f"""
+Nutze die folgenden Informationen, um die Frage möglichst genau zu beantworten.
+
+Context:
+{context}
+
+Frage:
+{user_input}
+"""
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=st.session_state.messages
+        )
+        reply = response.choices[0].message.content
+        st.chat_message("assistant").markdown(reply)
+        st.session_state.messages.append({"role": "assistant", "content": reply})
+    except Exception as e:
+        st.error(f"Fehler beim Antworten: {e}")
+
 
