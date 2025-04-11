@@ -1,5 +1,5 @@
-streamlit
+llama_index
 openai
-llama-index==0.10.30
 beautifulsoup4
 requests
+streamlit
