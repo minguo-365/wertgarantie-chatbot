@@ -1,15 +1,4 @@
-# 在代码中自动安装必要的包
-def install_packages():
-    required_packages = [
-        'llama_index', 
-        'openai', 
-        'beautifulsoup4', 
-        'requests', 
-        'streamlit'
-    ]
-    subprocess.check_call([sys.executable, "-m", "pip", "install"] + required_packages)
 
-install_packages()
 import os
 import requests
 from bs4 import BeautifulSoup
