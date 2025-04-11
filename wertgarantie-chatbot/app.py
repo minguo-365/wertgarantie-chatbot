@@ -10,7 +10,7 @@ from sentence_transformers import SentenceTransformer
 # ---------------------------
 # 1. 文档向量初始化
 # ---------------------------
-@st.cache_resource
+@st.cache(allow_output_mutation=True)
 def init_vector_store():
     with open("wertgarantie.txt", "r", encoding="utf-8") as f:
         text = f.read()
