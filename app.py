@@ -93,7 +93,7 @@ Frage:
 """
         st.session_state.messages.append({"role": "user", "content": prompt})
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o mini",
             messages=st.session_state.messages
         )
         reply = response.choices[0].message.content
