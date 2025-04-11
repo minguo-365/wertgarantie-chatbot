@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+import openai
 from llama_index.core import (
     SimpleDirectoryReader,
     StorageContext,
