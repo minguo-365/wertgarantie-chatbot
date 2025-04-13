@@ -97,16 +97,12 @@ def chat_bubble(content, align="left", bgcolor="#F1F0F0", avatar_url=None):
 USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
 BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
 
-def link_mit_chat_und_sprung(nachricht_user, nachricht_bot, url):
+def link_mit_chat_und_link(nachricht_user, nachricht_bot_text, url):
+    link_html = f'<a href="{url}" target="_blank">👉 Hier klicken, um zur Seite zu gelangen</a>'
+    nachricht_bot = f"{nachricht_bot_text}<br>{link_html}"
     st.session_state.chat_history.append((nachricht_user, nachricht_bot))
     chat_bubble(nachricht_user, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
     chat_bubble(nachricht_bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
-    st.markdown(f"""
-        <meta http-equiv="refresh" content="0;url={url}" />
-        <script>
-            window.open("{url}", "_blank");
-        </script>
-    """, unsafe_allow_html=True)
 
 for user_msg, bot_msg in st.session_state.chat_history:
     chat_bubble(user_msg, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
@@ -125,21 +121,21 @@ if user_input:
         col1, col2, col3 = st.columns(3)
         with col1:
             if st.button("Smartphone-,Tablet-,Notebook-Versicherung", key="btn1"):
-                link_mit_chat_und_sprung(
+                link_mit_chat_und_link(
                     "Ich interessiere mich für eine Smartphone-Versicherung.",
                     "Hier finden Sie Informationen zur Smartphone-, Tablet- oder Notebook-Versicherung.",
                     "https://www.wertgarantie.de/versicherung#/"
                 )
         with col2:
             if st.button("Waschmaschine-,Kaffeevollautomat-Versicherung", key="btn2"):
-                link_mit_chat_und_sprung(
+                link_mit_chat_und_link(
                     "Ich möchte meine Waschmaschine oder meinen Kaffeevollautomaten versichern.",
                     "Hier finden Sie Informationen zur Versicherung Ihrer Haushaltsgeräte.",
                     "https://www.wertgarantie.de/versicherung#/"
                 )
         with col3:
             if st.button("Smartwatch-,Hörgerät-,Kamera-Versicherung", key="btn3"):
-                link_mit_chat_und_sprung(
+                link_mit_chat_und_link(
                     "Ich benötige eine Versicherung für meine Smartwatch, Kamera oder mein Hörgerät.",
                     "Hier finden Sie Schutzangebote für Smartwatches, Kameras und mehr.",
                     "https://www.wertgarantie.de/versicherung#/"
@@ -148,21 +144,21 @@ if user_input:
         col4, col5, col6 = st.columns(3)
         with col4:
             if st.button("Schaden melden", key="btn4"):
-                link_mit_chat_und_sprung(
+                link_mit_chat_und_link(
                     "Ich möchte einen Schaden melden.",
                     "Kein Problem – wir leiten Sie direkt zum Schadenformular weiter.",
                     "https://www.wertgarantie.de/service/schaden-melden"
                 )
         with col5:
             if st.button("FAQ", key="btn5"):
-                link_mit_chat_und_sprung(
+                link_mit_chat_und_link(
                     "Wo finde ich häufig gestellte Fragen (FAQ)?",
                     "Hier finden Sie Antworten auf häufig gestellte Fragen.",
                     "https://www.wertgarantie.de/service/haeufige-fragen"
                 )
         with col6:
             if st.button("Kontakt", key="btn6"):
-                link_mit_chat_und_sprung(
+                link_mit_chat_und_link(
                     "Ich möchte den Kundenservice kontaktieren.",
                     "Hier finden Sie unsere Kontaktmöglichkeiten.",
                     "https://www.wertgarantie.de/service/kontakt"
