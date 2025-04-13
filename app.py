@@ -98,11 +98,10 @@ USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
 BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
 
 def link_mit_chat_und_link(nachricht_user, nachricht_bot_text, url):
-    link_html = f'<a href="{url}" target="_blank">👉 Hier klicken, um zur Seite zu gelangen</a>'
-    nachricht_bot = f"{nachricht_bot_text}<br>{link_html}"
-    st.session_state.chat_history.append((nachricht_user, nachricht_bot))
+    st.session_state.chat_history.append((nachricht_user, nachricht_bot_text))
     chat_bubble(nachricht_user, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
-    chat_bubble(nachricht_bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+    chat_bubble(nachricht_bot_text, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+    st.markdown(f'<a href="{url}" target="_blank">👉 Hier klicken, um zur Seite zu gelangen</a>', unsafe_allow_html=True)
 
 for user_msg, bot_msg in st.session_state.chat_history:
     chat_bubble(user_msg, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
