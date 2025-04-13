@@ -97,15 +97,15 @@ def chat_bubble(inhalt, align="left", bgcolor="#F1F0F0", avatar_url=None):
 USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
 BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
 
-def link_mit_chat_und_link(nutzer_text, bot_text, url):
+def link_mit_chat_und_link(bot_text, url):
     link = f'<a href="{url}" target="_blank">👉 Hier klicken, um zur Seite zu gelangen</a>'
     gesamt_text = f"{bot_text}<br>{link}"
-    st.session_state.chat_history.append((nutzer_text, gesamt_text))
-    chat_bubble(nutzer_text, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    st.session_state.chat_history.append((None, gesamt_text))
     chat_bubble(gesamt_text, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 for nutzer, bot in st.session_state.chat_history:
-    chat_bubble(nutzer, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    if nutzer:
+        chat_bubble(nutzer, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
     chat_bubble(bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 benutzereingabe = st.chat_input("Ihre Frage eingeben:")
@@ -129,7 +129,8 @@ if benutzereingabe:
     else:
         verlauf = []
         for frage, antwort in st.session_state.chat_history[-6:]:
-            verlauf.append({"role": "user", "content": frage})
+            if frage:
+                verlauf.append({"role": "user", "content": frage})
             verlauf.append({"role": "assistant", "content": antwort})
 
         nachrichten = [
@@ -149,26 +150,20 @@ st.markdown("""---
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    if st.button("Smartphone-，Waschmaschine-，Kamera-Versicherung", key="btn1"):
+    if st.button("Smartphone-Versicherung", key="btn1"):
         link_mit_chat_und_link(
-            "Ich interessiere mich für eine Smartphone-Versicherung.",
             "Hier finden Sie Informationen zur Smartphone-Versicherung.",
             "https://www.wertgarantie.de/versicherung#/"
         )
-        
 with col2:
-    if st.button("Werkstätten", key="btn2"):
+    if st.button("Waschmaschine-Versicherung", key="btn2"):
         link_mit_chat_und_link(
-            "",
-            "Hier finden Sie Informationen zur Werkstätten.",
-            "https://www.wertgarantie.de/werkstattsuche"
+            "Hier finden Sie Informationen zur Waschmaschinen-Versicherung.",
+            "https://www.wertgarantie.de/versicherung#/"
         )
-        
 with col3:
-    if st.button("Fachhändler", key="btn3"):
+    if st.button("Kamera-Versicherung", key="btn3"):
         link_mit_chat_und_link(
-            "",
-            "Hier finden Sie Informationen zur Fachhändler.",
-            "https://www.wertgarantie.de/haendlersuche"
+            "Hier finden Sie Informationen zur Kamera-Versicherung.",
+            "https://www.wertgarantie.de/versicherung#/"
         )
-
