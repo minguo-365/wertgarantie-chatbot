@@ -117,25 +117,31 @@ if user_input:
         # 👉 Buttons NUR bei Begrüßung anzeigen
         col1, col2, col3 = st.columns(3)
         with col1:
-            if st.button("Autoversicherung", key="btn1"):
+            if st.button("Smartphone-versicherung", key="btn1"):
                 st.session_state.chat_history.append(("Autoversicherung", "Sie haben Autoversicherung gewählt."))
         with col2:
-            if st.button("Auslandskrankenschutz", key="btn2"):
-                st.session_state.chat_history.append(("Auslandskrankenschutz", "Sie haben Auslandskrankenschutz gewählt."))
+            if st.button("Tabletversicherung", key="btn2"):
+                st.session_state.chat_history.append(("Notebook-versicherung", "Sie haben Auslandskrankenschutz gewählt."))
         with col3:
             if st.button("Reiserücktrittsversicherung", key="btn3"):
-                st.session_state.chat_history.append(("Reiserücktrittsversicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
+                st.session_state.chat_history.append(("TV-versicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
 
         col4, col5, col6 = st.columns(3)
         with col4:
             if st.button("Familienmitgliedschaft", key="btn4"):
-                st.session_state.chat_history.append(("Familienmitgliedschaft", "Sie haben Familienmitgliedschaft gewählt."))
+                st.session_state.chat_history.append(("Waschmaschine-versicherung", "Sie haben Familienmitgliedschaft gewählt."))
         with col5:
             if st.button("Hilfe zur Mitgliedskarte", key="btn5"):
-                st.session_state.chat_history.append(("Hilfe zur Mitgliedskarte", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
+                st.session_state.chat_history.append(("Hörgerät-versicherung", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
         with col6:
             if st.button("Kontakt zum Kundenservice", key="btn6"):
-                st.session_state.chat_history.append(("Kontakt zum Kundenservice", "Sie haben Kontakt zum Kundenservice gewählt."))
+                st.session_state.chat_history.append(("Smartwatch-versicherung", "Sie haben Kontakt zum Kundenservice gewählt."))
+         with col7:
+            if st.button("Hilfe zur Mitgliedskarte", key="btn7"):
+                st.session_state.chat_history.append(("Kamera-versicherung", "Sie haben Hilfe zur Mitgliedskarte gewählt."))  
+        with col8:
+            if st.button("Hilfe zur Mitgliedskarte", key="btn8"):
+                st.session_state.chat_history.append(("Kaffeevollautomat-versicherung", "Sie haben Hilfe zur Mitgliedskarte gewählt."))         
 
     # Versicherung oder Schadenmeldung erkennen
     elif any(stichwort in benutzereingabe for stichwort in ["versicherung", "schaden melden"]):
