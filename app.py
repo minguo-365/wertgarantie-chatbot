@@ -74,7 +74,7 @@ def frage_openrouter(nachrichten):
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
-if st.button("🯩 Verlauf löschen"):
+if st.button("🔩 Verlauf löschen"):
     st.session_state.chat_history = []
     st.rerun()
 
@@ -100,7 +100,7 @@ USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
 BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
 
 def link_mit_chat_und_link(bot_text, url):
-    link = f'<a href="{url}" target="_blank">👉 Hier klicken, um zur Seite zu gelangen</a>'
+    link = f'<a href="{url}" target="_blank">🔗 Hier klicken, um zur Seite zu gelangen</a>'
     st.session_state.chat_history.append((None, link))
     chat_bubble(link, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
@@ -151,18 +151,18 @@ col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("Smartphone-，Waschmaschine-，Kamera-Versicherung", key="btn1"):
         link_mit_chat_und_link(
-            "Hier finden Sie Informationen zur Smartphone-Versicherung.",
+            "",  # Bot-Text entfernen, nur Link anzeigen
             "https://www.wertgarantie.de/versicherung#/"
         )
 with col2:
     if st.button("Werkstätten", key="btn2"):
         link_mit_chat_und_link(
-            "Hier finden Sie Informationen zur Werkstätten.",
+            "",
             "https://www.wertgarantie.de/werkstattsuche"
         )
 with col3:
     if st.button("Fachhändler", key="btn3"):
         link_mit_chat_und_link(
-            "Hier finden Sie Informationen zur Fachhändler.",
+            "",
             "https://www.wertgarantie.de/haendlersuche"
         )
