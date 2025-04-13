@@ -1,14 +1,19 @@
+# streamlit_app.py
 import streamlit as st
-st.set_page_config(page_title="Wertgarantie Chatbot", layout="wide")
-
+import nest_asyncio
+nest_asyncio.apply()
 import os
 import faiss
 import numpy as np
-from openai import
+from openai import OpenAI
 from sentence_transformers import SentenceTransformer
+import re
+import requests
 
-openai.api_key = st.secrets["OPENROUTER_API_KEY"]
-openai.api_base = "https://openrouter.ai/api/v1"
+st.set_page_config(page_title="🤖 Willkommen", layout="wide")
+
+client = OpenAI(api_key=st.secrets["OPENROUTER_API_KEY"], base_url="https://openrouter.ai/api/v1")
+
 @st.cache_resource
 def init_vector_store():
     with open("wertgarantie.txt", "r", encoding="utf-8") as f:
@@ -25,78 +30,133 @@ model, chunks, index, _ = init_vector_store()
 def get_relevant_chunks(query, k=3):
     query_vec = model.encode([query])
     D, I = index.search(np.array(query_vec), k)
-    return [chunks[i] for i in I[0]]
+    return [(chunks[i], i) for i in I[0]]
 
-# ---------------------------
-# 2. 页面样式
-# ---------------------------
-st.image("https://raw.githubusercontent.com/你的用户名/你的仓库名/main/wertgarantie_logo.png", width=160)
-st.markdown("""
-<div style='text-align: center; margin-top: -30px;'>
-    <h1>🤖 Willkommen</h1>
-</div>
-""", unsafe_allow_html=True)
+def correct_grammar_with_languagetool(text):
+    try:
+        response = requests.post(
+            "https://api.languagetoolplus.com/v2/check",
+            data={"text": text, "language": "de-DE"},
+            headers={"Content-Type": "application/x-www-form-urlencoded"}
+        )
+        matches = response.json().get("matches", [])
+        for match in reversed(matches):
+            offset = match["offset"]
+            length = match["length"]
+            replacement = match["replacements"][0]["value"] if match["replacements"] else ""
+            text = text[:offset] + replacement + text[offset+length:]
+        return text
+    except:
+        return text
 
-st.markdown("""
-<style>
-    .stTextInput > div > div > input {
-        border-radius: 10px;
-        font-size: 18px;
-        padding: 10px;
-    }
-    .stMarkdown {
-        font-size: 17px;
-        line-height: 1.6;
-    }
-    .block-container {
-        padding-top: 1.5rem;
-        padding-bottom: 2rem;
-    }
-</style>
-""", unsafe_allow_html=True)
+def remove_non_german(text):
+    text = re.sub(r'[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]+', '', text)
+    text = re.sub(r'Es tut mir leid, dazu habe ich leider keine Informationen\.', '', text)
+    return text.strip()
 
-# ---------------------------
-# 3. 初始化 OpenAI & 聊天记录
-# ---------------------------
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+def ask_openrouter(messages):
+    try:
+        response = client.chat.completions.create(
+            model="mistralai/mistral-7b-instruct",
+            messages=messages
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        if "code': 402" in str(e).lower() or "insuffizien" in str(e).lower():
+            try:
+                response = client.chat.completions.create(
+                    model="mistralai/mistral-7b-instruct:free",
+                    messages=messages
+                )
+                return response.choices[0].message.content
+            except Exception as e2:
+                return f"❌ Auch das kostenlose Modell schlug fehl: {e2}"
+        else:
+            return f"❌ OpenRouter Fehler: {e}"
 
-if "messages" not in st.session_state:
-    st.session_state.messages = [
-        {"role": "system", "content": "你是一个专业客服助手，可以结合公司提供的文档来回答客户的问题。"}
+st.title("🤖 Willkommen")
+st.markdown("**Ich bin Ihr digitaler Assistent.**")
+
+if st.button("🯩 Verlauf löschen"):
+    st.session_state.chat_history = []
+    st.rerun()
+
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+def chat_bubble(content, align="left", bgcolor="#F1F0F0", avatar_url=None):
+    align_css = "right" if align == "right" else "left"
+    avatar_html = f"<img src='{avatar_url}' style='width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;' />" if avatar_url else ""
+    bubble_html = f"""
+        <div style='text-align: {align_css}; margin: 10px 0; display: flex; flex-direction: {'row-reverse' if align=='right' else 'row'};'>
+            {avatar_html}
+            <div style='background-color: {bgcolor}; padding: 10px 15px; border-radius: 10px; max-width: 80%;'>
+                {content}
+            </div>
+        </div>
+    """
+    st.markdown(bubble_html, unsafe_allow_html=True)
+
+USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
+BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
+
+for user_msg, bot_msg in st.session_state.chat_history:
+    chat_bubble(user_msg, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    chat_bubble(bot_msg, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+
+# Schnellzugriffsoptionen über den Chat
+with st.container():
+    cols = st.columns(3)
+    buttons = [
+        "Autoversicherung", "Auslandskrankenschutz", "Reiserücktrittsversicherung",
+        "Familienmitgliedschaft", "Hilfe zur Mitgliedskarte", "Kontakt zum Kundenservice"
     ]
+    for i, label in enumerate(buttons):
+        if cols[i % 3].button(label):
+            st.session_state.quick_input = label
 
-for msg in st.session_state.messages:
-    if msg["role"] != "system":
-        st.chat_message(msg["role"]).markdown(msg["content"])
-
-# ---------------------------
-# 4. 用户输入 & 回答生成
-# ---------------------------
-user_input = st.chat_input("Bitte geben Sie Ihre Frage ein")
+# Wenn Schnellzugriffsbutton geklickt wurde, als Nutzereingabe behandeln
+if 'quick_input' in st.session_state:
+    user_input = st.session_state.quick_input
+    del st.session_state.quick_input
+else:
+    user_input = st.chat_input("Ihre Frage eingeben:")
 
 if user_input:
-    st.chat_message("user").markdown(user_input)
-    st.session_state.messages.append({"role": "user", "content": user_input})
+    chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
 
-    try:
-        context_chunks = get_relevant_chunks(user_input)
-        context = "\n\n".join(context_chunks)
-        prompt = f"""
-Nutze die folgenden Informationen, um die Frage möglichst genau zu beantworten.
-
-Context:
-{context}
-
-Frage:
-{user_input}
-"""
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        response = client.chat.completions.create(
-            model="gpt-4o mini",
-            messages=st.session_state.messages
+    if user_input.strip().lower() in ["hallo", "hi", "guten tag", "hey"]:
+        welcome_reply = "Hallo und willkommen bei Wertgarantie! Was kann ich für Sie tun?"
+        st.session_state.chat_history.append((user_input, welcome_reply))
+        chat_bubble(welcome_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+    elif any(keyword in user_input.lower() for keyword in ["versicherung", "schaden melden"]):
+        versicherung_reply = (
+            "WERTGARANTIE bietet verschiedene Versicherungen an, darunter Schutz für Smartphones, Tablets, Laptops, E-Bikes/Fahrräder, Hörgeräte sowie Haushalts- und Unterhaltungselektronik."
+            " Unsere Produkte bieten umfassenden Schutz vor Reparaturkosten, Diebstahl und technischen Defekten. Möchten Sie zu einem bestimmten Gerät mehr erfahren?"
         )
-        reply = response.choices[0].message.content
-        st.chat_message("assistant").markdown(reply)
-        st.session_state.messages.append({"role": "assistant", "content": reply})
-    except Exception as e:
-        st.error(f"Fehler beim Antworten: {e}")
+        st.session_state.chat_history.append((user_input, versicherung_reply))
+        chat_bubble(versicherung_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+    else:
+        conversation_history = []
+        for prev_user, prev_bot in st.session_state.chat_history[-6:]:
+            conversation_history.append({"role": "user", "content": prev_user})
+            conversation_history.append({"role": "assistant", "content": prev_bot})
+
+        messages = [
+            {
+                "role": "system",
+                "content": (
+                    "Sie sind ein professioneller Kundenservice-Chatbot. "
+                    "Bitte antworten Sie hilfreich und korrekt auf Deutsch, möglichst prägnant und höflich."
+                )
+            }
+        ] + conversation_history + [
+            {"role": "user", "content": user_input}
+        ]
+
+        answer = ask_openrouter(messages)
+        answer = remove_non_german(answer)
+        corrected = correct_grammar_with_languagetool(answer)
+
+        st.session_state.chat_history.append((user_input, corrected))
+        chat_bubble(corrected, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
