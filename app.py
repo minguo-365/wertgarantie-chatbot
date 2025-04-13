@@ -114,6 +114,7 @@ if user_input:
         st.session_state.chat_history.append((user_input, welcome_reply))
         chat_bubble(welcome_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
+        
         # 👉 Buttons NUR bei Begrüßung anzeigen
         col1, col2, col3 = st.columns(3)
         with col1:
