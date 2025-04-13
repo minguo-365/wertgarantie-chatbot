@@ -147,7 +147,7 @@ st.markdown("""---
 **Wählen Sie eine Kategorie:**
 """)
 
-col1 = st.columns(1)
+col1 = st.columns(1)[0]
 with col1:
     if st.button("Smartphone-，Waschmaschine-，Kamera-Versicherung", key="btn1"):
         link_mit_chat_und_link(
