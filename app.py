@@ -159,7 +159,7 @@ with col1:
 with col2:
     if st.button("Werkstätten", key="btn2"):
         link_mit_chat_und_link(
-            "Möchten Sie Schaden melden",
+            "",
             "Hier finden Sie Informationen zur Werkstätten.",
             "https://www.wertgarantie.de/werkstattsuche"
         )
@@ -167,7 +167,7 @@ with col2:
 with col3:
     if st.button("Fachhändler", key="btn3"):
         link_mit_chat_und_link(
-            "Möchten Sie Schaden melden",
+            "",
             "Hier finden Sie Informationen zur Fachhändler.",
             "https://www.wertgarantie.de/haendlersuche"
         )
