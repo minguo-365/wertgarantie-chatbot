@@ -151,7 +151,8 @@ col1 = st.columns(1)[0]
 with col1:
     if st.button("Smartphone-，Waschmaschine-，Kamera-Versicherung", key="btn1"):
         link_mit_chat_und_link(
-            "",  # Bot-Text entfernen, nur Link anzeigen
+            "Hier sind die Informationen", 
+            "Hier sind die Informationen"
             "https://www.wertgarantie.de/versicherung#/"
         )
 col2, col3 = st.columns(2)
