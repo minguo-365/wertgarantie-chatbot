@@ -74,18 +74,6 @@ def ask_openrouter(messages):
 
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
-option = st.radio(
-    "Bitte wählen Sie eine Kategorie:",
-    (
-        "Autoversicherung",
-        "Auslandskrankenschutz",
-        "Reiserücktrittsversicherung",
-        "Familienmitgliedschaft",
-        "Hilfe zur Mitgliedskarte",
-        "Kontakt zum Kundenservice"
-    ),
-    horizontal=True
-)
 
 st.write(f"Sie haben gewählt: **{option}**")
 
@@ -131,6 +119,29 @@ if user_input:
         welcome_reply = "Hallo und willkommen bei Wertgarantie! Was kann ich für Sie tun?"
         st.session_state.chat_history.append((user_input, welcome_reply))
         chat_bubble(welcome_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+        
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("Autoversicherung", key="btn1"):
+            st.session_state.chat_history.append(("Autoversicherung", "Sie haben Autoversicherung gewählt."))
+    with col2:
+        if st.button("Auslandskrankenschutz", key="btn2"):
+            st.session_state.chat_history.append(("Auslandskrankenschutz", "Sie haben Auslandskrankenschutz gewählt."))
+    with col3:
+        if st.button("Reiserücktrittsversicherung", key="btn3"):
+            st.session_state.chat_history.append(("Reiserücktrittsversicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
+
+    col4, col5, col6 = st.columns(3)
+    with col4:
+        if st.button("Familienmitgliedschaft", key="btn4"):
+            st.session_state.chat_history.append(("Familienmitgliedschaft", "Sie haben Familienmitgliedschaft gewählt."))
+    with col5:
+        if st.button("Hilfe zur Mitgliedskarte", key="btn5"):
+            st.session_state.chat_history.append(("Hilfe zur Mitgliedskarte", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
+    with col6:
+        if st.button("Kontakt zum Kundenservice", key="btn6"):
+            st.session_state.chat_history.append(("Kontakt zum Kundenservice", "Sie haben Kontakt zum Kundenservice gewählt."))
+
     elif any(keyword in user_input.lower() for keyword in ["versicherung", "schaden melden"]):
         versicherung_reply = (
             "WERTGARANTIE bietet verschiedene Versicherungen an, darunter Schutz für Smartphones, Tablets, Laptops, E-Bikes/Fahrräder, Hörgeräte sowie Haushalts- und Unterhaltungselektronik."
