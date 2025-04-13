@@ -115,7 +115,7 @@ if user_input:
         chat_bubble(welcome_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
         # 👉 Buttons NUR bei Begrüßung anzeigen
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3 = st.columns(3)
         with col1:
             if st.button("Smartphone-,Tablet-,Notebook-versicherung", key="btn1"):
                 st.session_state.chat_history.append(("Smartphone-versicherung", "Sie haben Autoversicherung gewählt."))
@@ -125,23 +125,17 @@ if user_input:
         with col3:
             if st.button("Smartwatch,Kamera-versicherung", key="btn3"):
                 st.session_state.chat_history.append(("TV-versicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
-        with col4:
+
+        col4, col5, col6 = st.columns(3)
+         with col4:
             if st.button("Schaden melden", key="btn4"):
                 st.session_state.chat_history.append(("Waschmaschine-versicherung", "Sie haben Familienmitgliedschaft gewählt."))
-
-        col5, col6, col7, col8 = st.columns(4)
         with col5:
             if st.button("FAQ", key="btn5"):
                 st.session_state.chat_history.append(("Hörgerät-versicherung", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
         with col6:
             if st.button("Kontakt", key="btn6"):
-                st.session_state.chat_history.append(("Smartwatch-versicherung", "Sie haben Kontakt zum Kundenservice gewählt."))
-        with col7:
-            if st.button("Kamera-versicherung", key="btn7"):
-                st.session_state.chat_history.append(("Kamera-versicherung", "Sie haben Kontakt zum Kundenservice gewählt."))
-        with col8:
-            if st.button("Kaffeevollautomat-versicherung", key="btn8"):
-                st.session_state.chat_history.append(("Kaffeevollautomat-versicherung", "Sie haben Hilfe zur Mitgliedskarte gewählt."))         
+                st.session_state.chat_history.append(("Smartwatch-versicherung", "Sie haben Kontakt zum Kundenservice gewählt."))       
 
     # Versicherung oder Schadenmeldung erkennen
     elif any(stichwort in benutzereingabe for stichwort in ["versicherung", "schaden melden"]):
