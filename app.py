@@ -74,7 +74,7 @@ def frage_openrouter(nachrichten):
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
-if st.button("🔩 Verlauf löschen"):
+if st.button("🩹 Verlauf löschen"):
     st.session_state.chat_history = []
     st.rerun()
 
