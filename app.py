@@ -115,7 +115,7 @@ if user_input:
         chat_bubble(welcome_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
         # 👉 Buttons NUR bei Begrüßung anzeigen
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             if st.button("Smartphone-versicherung", key="btn1"):
                 st.session_state.chat_history.append(("Autoversicherung", "Sie haben Autoversicherung gewählt."))
@@ -125,11 +125,11 @@ if user_input:
         with col3:
             if st.button("Reiserücktrittsversicherung", key="btn3"):
                 st.session_state.chat_history.append(("TV-versicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
-
-        col4, col5, col6 = st.columns(3)
         with col4:
             if st.button("Familienmitgliedschaft", key="btn4"):
                 st.session_state.chat_history.append(("Waschmaschine-versicherung", "Sie haben Familienmitgliedschaft gewählt."))
+
+        col5, col6, col7, col8 = st.columns(4)
         with col5:
             if st.button("Hilfe zur Mitgliedskarte", key="btn5"):
                 st.session_state.chat_history.append(("Hörgerät-versicherung", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
