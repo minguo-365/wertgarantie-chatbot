@@ -9,8 +9,6 @@ import re
 import requests
 
 st.set_page_config(page_title="🤖 Willkommen", layout="wide")
-import nest_asyncio
-nest_asyncio.apply()
 
 client = OpenAI(api_key=st.secrets["OPENROUTER_API_KEY"], base_url="https://openrouter.ai/api/v1")
 
@@ -77,7 +75,7 @@ def ask_openrouter(messages):
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
-if st.button("🯩 Verlauf löschen"):
+if st.button("🩹 Verlauf löschen"):
     st.session_state.chat_history = []
     st.rerun()
 
@@ -104,23 +102,7 @@ for user_msg, bot_msg in st.session_state.chat_history:
     chat_bubble(user_msg, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
     chat_bubble(bot_msg, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-# Schnellzugriffsoptionen über den Chat
-with st.container():
-    cols = st.columns(3)
-    buttons = [
-        "Autoversicherung", "Auslandskrankenschutz", "Reiserücktrittsversicherung",
-        "Familienmitgliedschaft", "Hilfe zur Mitgliedskarte", "Kontakt zum Kundenservice"
-    ]
-    for i, label in enumerate(buttons):
-        if cols[i % 3].button(label):
-            st.session_state.quick_input = label
-
-# Wenn Schnellzugriffsbutton geklickt wurde, als Nutzereingabe behandeln
-if 'quick_input' in st.session_state:
-    user_input = st.session_state.quick_input
-    del st.session_state.quick_input
-else:
-    user_input = st.chat_input("Ihre Frage eingeben:")
+user_input = st.chat_input("Ihre Frage eingeben:")
 
 if user_input:
     chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
