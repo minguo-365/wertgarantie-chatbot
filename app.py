@@ -150,20 +150,20 @@ st.markdown("""---
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    if st.button("Smartphone-Versicherung", key="btn1"):
+    if st.button("Smartphone-，Waschmaschine-，Kamera-Versicherung", key="btn1"):
         link_mit_chat_und_link(
             "Hier finden Sie Informationen zur Smartphone-Versicherung.",
             "https://www.wertgarantie.de/versicherung#/"
         )
 with col2:
-    if st.button("Waschmaschine-Versicherung", key="btn2"):
+    if st.button("Werkstätten", key="btn2"):
         link_mit_chat_und_link(
-            "Hier finden Sie Informationen zur Waschmaschinen-Versicherung.",
-            "https://www.wertgarantie.de/versicherung#/"
+            "Hier finden Sie Informationen zur Werkstätten.",
+            "https://www.wertgarantie.de/werkstattsuche"
         )
 with col3:
-    if st.button("Kamera-Versicherung", key="btn3"):
+    if st.button("Fachhändler", key="btn3"):
         link_mit_chat_und_link(
-            "Hier finden Sie Informationen zur Kamera-Versicherung.",
-            "https://www.wertgarantie.de/versicherung#/"
+            "Hier finden Sie Informationen zur Fachhändler.",
+            "https://www.wertgarantie.de/haendlersuche"
         )
