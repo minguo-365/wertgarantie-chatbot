@@ -99,9 +99,8 @@ BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
 
 def link_mit_chat_und_link(nutzer_text, bot_text, url):
     link = f'<a href="{url}" target="_blank">👉 Hier klicken, um zur Seite zu gelangen</a>'
-    gesamt_text = f"{bot_text}<br>{link}"
-    st.session_state.chat_history.append((nutzer_text, gesamt_text))
-    chat_bubble(nutzer_text, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    gesamt_text = link  
+    st.session_state.chat_history.append((None, gesamt_text))
     chat_bubble(gesamt_text, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 for nutzer, bot in st.session_state.chat_history:
@@ -151,7 +150,6 @@ col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("Smartphone-，Waschmaschine-,Kamera-Versicherung", key="btn1"):
         link_mit_chat_und_link(
-            "Ich interessiere mich für eine Smartphone-Versicherung.",
             "Hier finden Sie Informationen zur Smartphone-Versicherung.",
             "https://www.wertgarantie.de/versicherung#/"
         )
