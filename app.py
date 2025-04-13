@@ -117,21 +117,21 @@ if user_input:
         # 👉 Buttons NUR bei Begrüßung anzeigen
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            if st.button("Smartphone-versicherung", key="btn1"):
+            if st.button("Smartphone-,Tablet-,Notebook-versicherung", key="btn1"):
                 st.session_state.chat_history.append(("Smartphone-versicherung", "Sie haben Autoversicherung gewählt."))
         with col2:
-            if st.button("Tablet-versicherung", key="btn2"):
+            if st.button("Waschmaschine-,Hörgerät-,Kaffeevollautomat-versicherung", key="btn2"):
                 st.session_state.chat_history.append(("Tabletversicherung", "Sie haben Auslandskrankenschutz gewählt."))
         with col3:
-            if st.button("TV-versicherung", key="btn3"):
+            if st.button("Smartwatch,Kamera-versicherung", key="btn3"):
                 st.session_state.chat_history.append(("TV-versicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
         with col4:
-            if st.button("Waschmaschine-versicherung", key="btn4"):
+            if st.button("Schaden melden", key="btn4"):
                 st.session_state.chat_history.append(("Waschmaschine-versicherung", "Sie haben Familienmitgliedschaft gewählt."))
 
         col5, col6, col7, col8 = st.columns(4)
         with col5:
-            if st.button("Hörgerät-versicherung", key="btn5"):
+            if st.button("FAQ", key="btn5"):
                 st.session_state.chat_history.append(("Hörgerät-versicherung", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
         with col6:
             if st.button("Smartwatch-versicherung", key="btn6"):
