@@ -1,7 +1,5 @@
 # streamlit_app.py
 import streamlit as st
-import nest_asyncio
-nest_asyncio.apply()
 import os
 import faiss
 import numpy as np
@@ -11,6 +9,8 @@ import re
 import requests
 
 st.set_page_config(page_title="🤖 Willkommen", layout="wide")
+import nest_asyncio
+nest_asyncio.apply()
 
 client = OpenAI(api_key=st.secrets["OPENROUTER_API_KEY"], base_url="https://openrouter.ai/api/v1")
 
