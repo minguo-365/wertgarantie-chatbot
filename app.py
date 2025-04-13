@@ -114,68 +114,28 @@ if user_input:
         st.session_state.chat_history.append((user_input, welcome_reply))
         chat_bubble(welcome_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-# 👉 Buttons NUR bei Begrüßung anzeigen（Eintrag in den Chat + Weiterleitung）
-def link_mit_chat_und_sprung(nachricht_user, nachricht_bot, url):
-    st.session_state.chat_history.append((nachricht_user, nachricht_bot))
-    chat_bubble(nachricht_user, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
-    chat_bubble(nachricht_bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
-    # Automatische Weiterleitung (neuer Tab)
-    st.markdown(f"""
-        <meta http-equiv="refresh" content="0;url={url}" />
-        <script>
-            window.open("{url}", "_blank");
-        </script>
-    """, unsafe_allow_html=True)
+        # 👉 Buttons NUR bei Begrüßung anzeigen
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if st.button("Smartphone-,Tablet-,Notebook-versicherung", key="btn1"):
+                st.session_state.chat_history.append(("Smartphone-versicherung", "Sie haben Autoversicherung gewählt."))
+        with col2:
+            if st.button("Waschmaschine-,Kaffeevollautomat-versicherung", key="btn2"):
+                st.session_state.chat_history.append(("Tabletversicherung", "Sie haben Auslandskrankenschutz gewählt."))
+        with col3:
+            if st.button("Smartwatch,Hörgerät-,Kamera-versicherung", key="btn3"):
+                st.session_state.chat_history.append(("TV-versicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    if st.button("Smartphone-, Tablet-, Notebook-Versicherung", key="btn1"):
-        link_mit_chat_und_sprung(
-            "Ich interessiere mich für eine Smartphone-Versicherung.",
-            "Hier finden Sie Informationen zur Smartphone-, Tablet- oder Notebook-Versicherung.",
-            "https://www.wertgarantie.de/versicherung#/"
-        )
-
-with col2:
-    if st.button("Waschmaschine-, Kaffeevollautomat-Versicherung", key="btn2"):
-        link_mit_chat_und_sprung(
-            "Ich möchte meine Waschmaschine oder meinen Kaffeevollautomaten versichern.",
-            "Hier finden Sie Informationen zur Versicherung Ihrer Haushaltsgeräte.",
-            "https://www.wertgarantie.de/versicherung#/"
-        )
-
-with col3:
-    if st.button("Smartwatch-, Hörgerät-, Kamera-Versicherung", key="btn3"):
-        link_mit_chat_und_sprung(
-            "Ich benötige eine Versicherung für meine Smartwatch, Kamera oder mein Hörgerät.",
-            "Hier finden Sie Schutzangebote für Smartwatches, Kameras und mehr.",
-            "https://www.wertgarantie.de/versicherung#/"
-        )
-
-col4, col5, col6 = st.columns(3)
-with col4:
-    if st.button("Schaden melden", key="btn4"):
-        link_mit_chat_und_sprung(
-            "Ich möchte einen Schaden melden.",
-            "Kein Problem – wir leiten Sie direkt zum Schadenformular weiter.",
-            "https://www.wertgarantie.de/service/schaden-melden"
-        )
-
-with col5:
-    if st.button("FAQ", key="btn5"):
-        link_mit_chat_und_sprung(
-            "Wo finde ich häufig gestellte Fragen (FAQ)?",
-            "Hier finden Sie Antworten auf häufig gestellte Fragen.",
-            "https://www.wertgarantie.de/service/haeufige-fragen"
-        )
-
-with col6:
-    if st.button("Kontakt", key="btn6"):
-        link_mit_chat_und_sprung(
-            "Ich möchte den Kundenservice kontaktieren.",
-            "Hier finden Sie unsere Kontaktmöglichkeiten.",
-            "https://www.wertgarantie.de/service/kontakt"
-        )
+        col4, col5, col6 = st.columns(3)
+        with col4:
+            if st.button("Schaden melden", key="btn4"):
+                st.session_state.chat_history.append(("Waschmaschine-versicherung", "Sie haben Familienmitgliedschaft gewählt."))
+        with col5:
+            if st.button("FAQ", key="btn5"):
+                st.session_state.chat_history.append(("Hörgerät-versicherung", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
+        with col6:
+            if st.button("Kontakt", key="btn6"):
+                st.session_state.chat_history.append(("Smartwatch-versicherung", "Sie haben Kontakt zum Kundenservice gewählt."))       
 
     # Versicherung oder Schadenmeldung erkennen
     elif any(stichwort in benutzereingabe for stichwort in ["versicherung", "schaden melden"]):
@@ -208,4 +168,3 @@ with col6:
         korrigiert = correct_grammar_with_languagetool(antwort)
         st.session_state.chat_history.append((user_input, korrigiert))
         chat_bubble(korrigiert, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
-
