@@ -127,7 +127,7 @@ if user_input:
                 st.session_state.chat_history.append(("TV-versicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
 
         col4, col5, col6 = st.columns(3)
-         with col4:
+        with col4:
             if st.button("Schaden melden", key="btn4"):
                 st.session_state.chat_history.append(("Waschmaschine-versicherung", "Sie haben Familienmitgliedschaft gewählt."))
         with col5:
