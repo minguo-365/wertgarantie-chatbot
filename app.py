@@ -74,6 +74,26 @@ def ask_openrouter(messages):
 
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
+option = st.radio(
+    "Bitte wählen Sie eine Kategorie:",
+    (
+        "Autoversicherung",
+        "Auslandskrankenschutz",
+        "Reiserücktrittsversicherung",
+        "Familienmitgliedschaft",
+        "Hilfe zur Mitgliedskarte",
+        "Kontakt zum Kundenservice"
+    ),
+    horizontal=True
+)
+
+st.write(f"Sie haben gewählt: **{option}**")
+
+# Hier könntest du je nach Auswahl unterschiedliche Chatbot-Antworten generieren
+if option == "Autoversicherung":
+    st.info("Hier findest du Infos zur Autoversicherung...")
+elif option == "Kontakt zum Kundenservice":
+    st.info("Du kannst unseren Kundenservice per E-Mail oder Hotline kontaktieren...")
 
 if st.button("🩹 Verlauf löschen"):
     st.session_state.chat_history = []
