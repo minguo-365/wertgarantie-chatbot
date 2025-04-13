@@ -147,13 +147,14 @@ st.markdown("""---
 **Wählen Sie eine Kategorie:**
 """)
 
-col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(1)
 with col1:
     if st.button("Smartphone-，Waschmaschine-，Kamera-Versicherung", key="btn1"):
         link_mit_chat_und_link(
             "",  # Bot-Text entfernen, nur Link anzeigen
             "https://www.wertgarantie.de/versicherung#/"
         )
+col2, col3 = st.columns(2)
 with col2:
     if st.button("Werkstätten", key="btn2"):
         link_mit_chat_und_link(
