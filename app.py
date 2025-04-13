@@ -24,12 +24,12 @@ def init_vector_store():
 
 model, chunks, index, _ = init_vector_store()
 
-def get_relevant_chunks(query, k=3):
-    query_vec = model.encode([query])
-    D, I = index.search(np.array(query_vec), k)
+def get_relevante_abschnitte(anfrage, k=3):
+    anfrage_vektor = model.encode([anfrage])
+    D, I = index.search(np.array(anfrage_vektor), k)
     return [(chunks[i], i) for i in I[0]]
 
-def correct_grammar_with_languagetool(text):
+def grammatik_korrigieren(text):
     try:
         response = requests.post(
             "https://api.languagetoolplus.com/v2/check",
@@ -46,16 +46,16 @@ def correct_grammar_with_languagetool(text):
     except:
         return text
 
-def remove_non_german(text):
+def entferne_nicht_deutsch(text):
     text = re.sub(r'[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]+', '', text)
     text = re.sub(r'Es tut mir leid, dazu habe ich leider keine Informationen\.', '', text)
     return text.strip()
 
-def ask_openrouter(messages):
+def frage_openrouter(nachrichten):
     try:
         response = client.chat.completions.create(
             model="mistralai/mistral-7b-instruct",
-            messages=messages
+            messages=nachrichten
         )
         return response.choices[0].message.content
     except Exception as e:
@@ -63,7 +63,7 @@ def ask_openrouter(messages):
             try:
                 response = client.chat.completions.create(
                     model="mistralai/mistral-7b-instruct:free",
-                    messages=messages
+                    messages=nachrichten
                 )
                 return response.choices[0].message.content
             except Exception as e2:
@@ -81,14 +81,14 @@ if st.button("🩹 Verlauf löschen"):
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-def chat_bubble(content, align="left", bgcolor="#F1F0F0", avatar_url=None):
+def chat_bubble(inhalt, align="left", bgcolor="#F1F0F0", avatar_url=None):
     align_css = "right" if align == "right" else "left"
     avatar_html = f"<img src='{avatar_url}' style='width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;' />" if avatar_url else ""
     bubble_html = f"""
         <div style='text-align: {align_css}; margin: 10px 0; display: flex; flex-direction: {'row-reverse' if align=='right' else 'row'};'>
             {avatar_html}
             <div style='background-color: {bgcolor}; padding: 10px 15px; border-radius: 10px; max-width: 80%;'>
-                {content}
+                {inhalt}
             </div>
         </div>
     """
@@ -97,99 +97,75 @@ def chat_bubble(content, align="left", bgcolor="#F1F0F0", avatar_url=None):
 USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
 BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
 
-def link_mit_chat_und_link(nachricht_user, nachricht_bot_text, url):
+def link_mit_chat_und_link(nutzer_text, bot_text, url):
     link = f'<a href="{url}" target="_blank">👉 Hier klicken, um zur Seite zu gelangen</a>'
-    full_bot_message = f"{nachricht_bot_text}<br>{link}"
-    st.session_state.chat_history.append((nachricht_user, full_bot_message))
-    chat_bubble(nachricht_user, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
-    chat_bubble(full_bot_message, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+    gesamt_text = f"{bot_text}<br>{link}"
+    st.session_state.chat_history.append((nutzer_text, gesamt_text))
+    chat_bubble(nutzer_text, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    chat_bubble(gesamt_text, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-for user_msg, bot_msg in st.session_state.chat_history:
-    chat_bubble(user_msg, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
-    chat_bubble(bot_msg, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+for nutzer, bot in st.session_state.chat_history:
+    chat_bubble(nutzer, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    chat_bubble(bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-user_input = st.chat_input("Ihre Frage eingeben:")
-if user_input:
-    chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
-    benutzereingabe = user_input.strip().lower()
+benutzereingabe = st.chat_input("Ihre Frage eingeben:")
+if benutzereingabe:
+    chat_bubble(benutzereingabe, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    eingabe = benutzereingabe.strip().lower()
 
-    if benutzereingabe in ["hallo", "hi", "guten tag", "hey"]:
-        welcome_reply = "Hallo und willkommen bei Wertgarantie! Was kann ich für Sie tun?"
-        st.session_state.chat_history.append((user_input, welcome_reply))
-        chat_bubble(welcome_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+    if eingabe in ["hallo", "hi", "guten tag", "hey"]:
+        willkommen = "Hallo und willkommen bei Wertgarantie! Was kann ich für Sie tun?"
+        st.session_state.chat_history.append((benutzereingabe, willkommen))
+        chat_bubble(willkommen, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            if st.button("Smartphone-,Tablet-,Notebook-Versicherung", key="btn1"):
-                link_mit_chat_und_link(
-                    "Ich interessiere mich für eine Smartphone-Versicherung.",
-                    "Hier finden Sie Informationen zur Smartphone-, Tablet- oder Notebook-Versicherung.",
-                    "https://www.wertgarantie.de/versicherung#/"
-                )
-        with col2:
-            if st.button("Waschmaschine-,Kaffeevollautomat-Versicherung", key="btn2"):
-                link_mit_chat_und_link(
-                    "Ich möchte meine Waschmaschine oder meinen Kaffeevollautomaten versichern.",
-                    "Hier finden Sie Informationen zur Versicherung Ihrer Haushaltsgeräte.",
-                    "https://www.wertgarantie.de/versicherung#/"
-                )
-        with col3:
-            if st.button("Smartwatch-,Hörgerät-,Kamera-Versicherung", key="btn3"):
-                link_mit_chat_und_link(
-                    "Ich benötige eine Versicherung für meine Smartwatch, Kamera oder mein Hörgerät.",
-                    "Hier finden Sie Schutzangebote für Smartwatches, Kameras und mehr.",
-                    "https://www.wertgarantie.de/versicherung#/"
-                )
-
-        col4, col5, col6 = st.columns(3)
-        with col4:
-            if st.button("Schaden melden", key="btn4"):
-                link_mit_chat_und_link(
-                    "Ich möchte einen Schaden melden.",
-                    "Kein Problem – wir leiten Sie direkt zum Schadenformular weiter.",
-                    "https://www.wertgarantie.de/service/schaden-melden"
-                )
-        with col5:
-            if st.button("FAQ", key="btn5"):
-                link_mit_chat_und_link(
-                    "Wo finde ich häufig gestellte Fragen (FAQ)?",
-                    "Hier finden Sie Antworten auf häufig gestellte Fragen.",
-                    "https://www.wertgarantie.de/service/haeufige-fragen"
-                )
-        with col6:
-            if st.button("Kontakt", key="btn6"):
-                link_mit_chat_und_link(
-                    "Ich möchte den Kundenservice kontaktieren.",
-                    "Hier finden Sie unsere Kontaktmöglichkeiten.",
-                    "https://www.wertgarantie.de/service/kontakt"
-                )
-
-    elif any(stichwort in benutzereingabe for stichwort in ["versicherung", "schaden melden"]):
+    elif any(stichwort in eingabe for stichwort in ["versicherung", "schaden"]):
         antwort = (
             "WERTGARANTIE bietet verschiedene Versicherungen an, darunter Schutz für Smartphones, Tablets, Laptops, E-Bikes/Fahrräder, Hörgeräte sowie Haushalts- und Unterhaltungselektronik. "
             "Unsere Produkte bieten umfassenden Schutz vor Reparaturkosten, Diebstahl und technischen Defekten. Möchten Sie zu einem bestimmten Gerät mehr erfahren?"
         )
-        st.session_state.chat_history.append((user_input, antwort))
+        st.session_state.chat_history.append((benutzereingabe, antwort))
         chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
     else:
-        kontextverlauf = []
+        verlauf = []
         for frage, antwort in st.session_state.chat_history[-6:]:
-            kontextverlauf.append({"role": "user", "content": frage})
-            kontextverlauf.append({"role": "assistant", "content": antwort})
+            verlauf.append({"role": "user", "content": frage})
+            verlauf.append({"role": "assistant", "content": antwort})
 
         nachrichten = [
-            {
-                "role": "system",
-                "content": (
-                    "Sie sind ein professioneller Kundenservice-Chatbot. "
-                    "Bitte antworten Sie hilfreich und korrekt auf Deutsch, möglichst prägnant und höflich."
-                )
-            }
-        ] + kontextverlauf + [{"role": "user", "content": user_input}]
+            {"role": "system", "content": "Sie sind ein professioneller Kundenservice-Chatbot. Bitte antworten Sie hilfreich und korrekt auf Deutsch, möglichst prägnant und höflich."}
+        ] + verlauf + [{"role": "user", "content": benutzereingabe}]
 
-        antwort = ask_openrouter(nachrichten)
-        antwort = remove_non_german(antwort)
-        korrigiert = correct_grammar_with_languagetool(antwort)
-        st.session_state.chat_history.append((user_input, korrigiert))
+        antwort = frage_openrouter(nachrichten)
+        antwort = entferne_nicht_deutsch(antwort)
+        korrigiert = grammatik_korrigieren(antwort)
+        st.session_state.chat_history.append((benutzereingabe, korrigiert))
         chat_bubble(korrigiert, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+
+# Immer anzeigen, nicht nur bei Begrüßung
+st.markdown("""---
+**Wählen Sie eine Kategorie:**
+""")
+
+col1, col2, col3 = st.columns(3)
+with col1:
+    if st.button("Smartphone-Versicherung", key="btn1"):
+        link_mit_chat_und_link(
+            "Ich interessiere mich für eine Smartphone-Versicherung.",
+            "Hier finden Sie Informationen zur Smartphone-Versicherung.",
+            "https://www.wertgarantie.de/versicherung#/"
+        )
+with col2:
+    if st.button("Waschmaschine-Versicherung", key="btn2"):
+        link_mit_chat_und_link(
+            "Ich möchte meine Waschmaschine versichern.",
+            "Hier finden Sie Informationen zur Waschmaschinen-Versicherung.",
+            "https://www.wertgarantie.de/versicherung#/"
+        )
+with col3:
+    if st.button("Kamera-Versicherung", key="btn3"):
+        link_mit_chat_und_link(
+            "Ich möchte meine Kamera versichern.",
+            "Hier finden Sie Informationen zur Kamera-Versicherung.",
+            "https://www.wertgarantie.de/versicherung#/"
+        )
