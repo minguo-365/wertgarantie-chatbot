@@ -1,4 +1,3 @@
-# streamlit_app.py
 import streamlit as st
 import os
 import faiss
@@ -98,6 +97,17 @@ def chat_bubble(content, align="left", bgcolor="#F1F0F0", avatar_url=None):
 USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
 BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
 
+def link_mit_chat_und_sprung(nachricht_user, nachricht_bot, url):
+    st.session_state.chat_history.append((nachricht_user, nachricht_bot))
+    chat_bubble(nachricht_user, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    chat_bubble(nachricht_bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+    st.markdown(f"""
+        <meta http-equiv="refresh" content="0;url={url}" />
+        <script>
+            window.open("{url}", "_blank");
+        </script>
+    """, unsafe_allow_html=True)
+
 for user_msg, bot_msg in st.session_state.chat_history:
     chat_bubble(user_msg, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
     chat_bubble(bot_msg, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
@@ -105,39 +115,59 @@ for user_msg, bot_msg in st.session_state.chat_history:
 user_input = st.chat_input("Ihre Frage eingeben:")
 if user_input:
     chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
-
     benutzereingabe = user_input.strip().lower()
 
-    # Begrüßung erkennen
     if benutzereingabe in ["hallo", "hi", "guten tag", "hey"]:
         welcome_reply = "Hallo und willkommen bei Wertgarantie! Was kann ich für Sie tun?"
         st.session_state.chat_history.append((user_input, welcome_reply))
         chat_bubble(welcome_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-        # 👉 Buttons NUR bei Begrüßung anzeigen
         col1, col2, col3 = st.columns(3)
         with col1:
-            if st.button("Smartphone-,Tablet-,Notebook-versicherung", key="btn1"):
-                st.session_state.chat_history.append(("Smartphone-versicherung", "Sie haben Autoversicherung gewählt."))
+            if st.button("Smartphone-,Tablet-,Notebook-Versicherung", key="btn1"):
+                link_mit_chat_und_sprung(
+                    "Ich interessiere mich für eine Smartphone-Versicherung.",
+                    "Hier finden Sie Informationen zur Smartphone-, Tablet- oder Notebook-Versicherung.",
+                    "https://www.wertgarantie.de/versicherung#/"
+                )
         with col2:
-            if st.button("Waschmaschine-,Kaffeevollautomat-versicherung", key="btn2"):
-                st.session_state.chat_history.append(("Tabletversicherung", "Sie haben Auslandskrankenschutz gewählt."))
+            if st.button("Waschmaschine-,Kaffeevollautomat-Versicherung", key="btn2"):
+                link_mit_chat_und_sprung(
+                    "Ich möchte meine Waschmaschine oder meinen Kaffeevollautomaten versichern.",
+                    "Hier finden Sie Informationen zur Versicherung Ihrer Haushaltsgeräte.",
+                    "https://www.wertgarantie.de/versicherung#/"
+                )
         with col3:
-            if st.button("Smartwatch,Hörgerät-,Kamera-versicherung", key="btn3"):
-                st.session_state.chat_history.append(("TV-versicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
+            if st.button("Smartwatch-,Hörgerät-,Kamera-Versicherung", key="btn3"):
+                link_mit_chat_und_sprung(
+                    "Ich benötige eine Versicherung für meine Smartwatch, Kamera oder mein Hörgerät.",
+                    "Hier finden Sie Schutzangebote für Smartwatches, Kameras und mehr.",
+                    "https://www.wertgarantie.de/versicherung#/"
+                )
 
         col4, col5, col6 = st.columns(3)
         with col4:
             if st.button("Schaden melden", key="btn4"):
-                st.session_state.chat_history.append(("Waschmaschine-versicherung", "Sie haben Familienmitgliedschaft gewählt."))
+                link_mit_chat_und_sprung(
+                    "Ich möchte einen Schaden melden.",
+                    "Kein Problem – wir leiten Sie direkt zum Schadenformular weiter.",
+                    "https://www.wertgarantie.de/service/schaden-melden"
+                )
         with col5:
             if st.button("FAQ", key="btn5"):
-                st.session_state.chat_history.append(("Hörgerät-versicherung", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
+                link_mit_chat_und_sprung(
+                    "Wo finde ich häufig gestellte Fragen (FAQ)?",
+                    "Hier finden Sie Antworten auf häufig gestellte Fragen.",
+                    "https://www.wertgarantie.de/service/haeufige-fragen"
+                )
         with col6:
             if st.button("Kontakt", key="btn6"):
-                st.session_state.chat_history.append(("Smartwatch-versicherung", "Sie haben Kontakt zum Kundenservice gewählt."))       
+                link_mit_chat_und_sprung(
+                    "Ich möchte den Kundenservice kontaktieren.",
+                    "Hier finden Sie unsere Kontaktmöglichkeiten.",
+                    "https://www.wertgarantie.de/service/kontakt"
+                )
 
-    # Versicherung oder Schadenmeldung erkennen
     elif any(stichwort in benutzereingabe for stichwort in ["versicherung", "schaden melden"]):
         antwort = (
             "WERTGARANTIE bietet verschiedene Versicherungen an, darunter Schutz für Smartphones, Tablets, Laptops, E-Bikes/Fahrräder, Hörgeräte sowie Haushalts- und Unterhaltungselektronik. "
@@ -146,7 +176,6 @@ if user_input:
         st.session_state.chat_history.append((user_input, antwort))
         chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-    # Standardantwort über OpenRouter (GPT)
     else:
         kontextverlauf = []
         for frage, antwort in st.session_state.chat_history[-6:]:
