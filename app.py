@@ -158,8 +158,7 @@ with col1:
 with col2:
     if st.button("Werkstätten", key="btn2"):
         link_mit_chat_und_link(
-            "Ich möchte meine Waschmaschine versichern.",
-            "Hier finden Sie Informationen zur Waschmaschinen-Versicherung.",
+            "Hier finden Sie Informationen zur Werkstätten.",
             "https://www.wertgarantie.de/werkstattsuche"
         )
 with col3:
