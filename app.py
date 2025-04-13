@@ -120,10 +120,10 @@ if user_input:
             if st.button("Smartphone-,Tablet-,Notebook-versicherung", key="btn1"):
                 st.session_state.chat_history.append(("Smartphone-versicherung", "Sie haben Autoversicherung gewählt."))
         with col2:
-            if st.button("Waschmaschine-,Hörgerät-,Kaffeevollautomat-versicherung", key="btn2"):
+            if st.button("Waschmaschine-,Kaffeevollautomat-versicherung", key="btn2"):
                 st.session_state.chat_history.append(("Tabletversicherung", "Sie haben Auslandskrankenschutz gewählt."))
         with col3:
-            if st.button("Smartwatch,Kamera-versicherung", key="btn3"):
+            if st.button("Smartwatch,Hörgerät-,Kamera-versicherung", key="btn3"):
                 st.session_state.chat_history.append(("TV-versicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
 
         col4, col5, col6 = st.columns(3)
