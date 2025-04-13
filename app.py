@@ -75,14 +75,6 @@ def ask_openrouter(messages):
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
-st.write(f"Sie haben gewählt: **{option}**")
-
-# Hier könntest du je nach Auswahl unterschiedliche Chatbot-Antworten generieren
-if option == "Autoversicherung":
-    st.info("Hier findest du Infos zur Autoversicherung...")
-elif option == "Kontakt zum Kundenservice":
-    st.info("Du kannst unseren Kundenservice per E-Mail oder Hotline kontaktieren...")
-
 if st.button("🩹 Verlauf löschen"):
     st.session_state.chat_history = []
     st.rerun()
@@ -111,51 +103,57 @@ for user_msg, bot_msg in st.session_state.chat_history:
     chat_bubble(bot_msg, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 user_input = st.chat_input("Ihre Frage eingeben:")
-
 if user_input:
     chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
 
-    if user_input.strip().lower() in ["hallo", "hi", "guten tag", "hey"]:
+    benutzereingabe = user_input.strip().lower()
+
+    # Begrüßung erkennen
+    if benutzereingabe in ["hallo", "hi", "guten tag", "hey"]:
         welcome_reply = "Hallo und willkommen bei Wertgarantie! Was kann ich für Sie tun?"
         st.session_state.chat_history.append((user_input, welcome_reply))
         chat_bubble(welcome_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
-        
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("Autoversicherung", key="btn1"):
-            st.session_state.chat_history.append(("Autoversicherung", "Sie haben Autoversicherung gewählt."))
-    with col2:
-        if st.button("Auslandskrankenschutz", key="btn2"):
-            st.session_state.chat_history.append(("Auslandskrankenschutz", "Sie haben Auslandskrankenschutz gewählt."))
-    with col3:
-        if st.button("Reiserücktrittsversicherung", key="btn3"):
-            st.session_state.chat_history.append(("Reiserücktrittsversicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
 
-    col4, col5, col6 = st.columns(3)
-    with col4:
-        if st.button("Familienmitgliedschaft", key="btn4"):
-            st.session_state.chat_history.append(("Familienmitgliedschaft", "Sie haben Familienmitgliedschaft gewählt."))
-    with col5:
-        if st.button("Hilfe zur Mitgliedskarte", key="btn5"):
-            st.session_state.chat_history.append(("Hilfe zur Mitgliedskarte", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
-    with col6:
-        if st.button("Kontakt zum Kundenservice", key="btn6"):
-            st.session_state.chat_history.append(("Kontakt zum Kundenservice", "Sie haben Kontakt zum Kundenservice gewählt."))
+        # 👉 Buttons NUR bei Begrüßung anzeigen
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if st.button("Autoversicherung", key="btn1"):
+                st.session_state.chat_history.append(("Autoversicherung", "Sie haben Autoversicherung gewählt."))
+        with col2:
+            if st.button("Auslandskrankenschutz", key="btn2"):
+                st.session_state.chat_history.append(("Auslandskrankenschutz", "Sie haben Auslandskrankenschutz gewählt."))
+        with col3:
+            if st.button("Reiserücktrittsversicherung", key="btn3"):
+                st.session_state.chat_history.append(("Reiserücktrittsversicherung", "Sie haben Reiserücktrittsversicherung gewählt."))
 
-    elif any(keyword in user_input.lower() for keyword in ["versicherung", "schaden melden"]):
-        versicherung_reply = (
-            "WERTGARANTIE bietet verschiedene Versicherungen an, darunter Schutz für Smartphones, Tablets, Laptops, E-Bikes/Fahrräder, Hörgeräte sowie Haushalts- und Unterhaltungselektronik."
-            " Unsere Produkte bieten umfassenden Schutz vor Reparaturkosten, Diebstahl und technischen Defekten. Möchten Sie zu einem bestimmten Gerät mehr erfahren?"
+        col4, col5, col6 = st.columns(3)
+        with col4:
+            if st.button("Familienmitgliedschaft", key="btn4"):
+                st.session_state.chat_history.append(("Familienmitgliedschaft", "Sie haben Familienmitgliedschaft gewählt."))
+        with col5:
+            if st.button("Hilfe zur Mitgliedskarte", key="btn5"):
+                st.session_state.chat_history.append(("Hilfe zur Mitgliedskarte", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
+        with col6:
+            if st.button("Kontakt zum Kundenservice", key="btn6"):
+                st.session_state.chat_history.append(("Kontakt zum Kundenservice", "Sie haben Kontakt zum Kundenservice gewählt."))
+
+    # Versicherung oder Schadenmeldung erkennen
+    elif any(stichwort in benutzereingabe for stichwort in ["versicherung", "schaden melden"]):
+        antwort = (
+            "WERTGARANTIE bietet verschiedene Versicherungen an, darunter Schutz für Smartphones, Tablets, Laptops, E-Bikes/Fahrräder, Hörgeräte sowie Haushalts- und Unterhaltungselektronik. "
+            "Unsere Produkte bieten umfassenden Schutz vor Reparaturkosten, Diebstahl und technischen Defekten. Möchten Sie zu einem bestimmten Gerät mehr erfahren?"
         )
-        st.session_state.chat_history.append((user_input, versicherung_reply))
-        chat_bubble(versicherung_reply, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
-    else:
-        conversation_history = []
-        for prev_user, prev_bot in st.session_state.chat_history[-6:]:
-            conversation_history.append({"role": "user", "content": prev_user})
-            conversation_history.append({"role": "assistant", "content": prev_bot})
+        st.session_state.chat_history.append((user_input, antwort))
+        chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-        messages = [
+    # Standardantwort über OpenRouter (GPT)
+    else:
+        kontextverlauf = []
+        for frage, antwort in st.session_state.chat_history[-6:]:
+            kontextverlauf.append({"role": "user", "content": frage})
+            kontextverlauf.append({"role": "assistant", "content": antwort})
+
+        nachrichten = [
             {
                 "role": "system",
                 "content": (
@@ -163,13 +161,11 @@ if user_input:
                     "Bitte antworten Sie hilfreich und korrekt auf Deutsch, möglichst prägnant und höflich."
                 )
             }
-        ] + conversation_history + [
-            {"role": "user", "content": user_input}
-        ]
+        ] + kontextverlauf + [{"role": "user", "content": user_input}]
 
-        answer = ask_openrouter(messages)
-        answer = remove_non_german(answer)
-        corrected = correct_grammar_with_languagetool(answer)
+        antwort = ask_openrouter(nachrichten)
+        antwort = remove_non_german(antwort)
+        korrigiert = correct_grammar_with_languagetool(antwort)
+        st.session_state.chat_history.append((user_input, korrigiert))
+        chat_bubble(korrigiert, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-        st.session_state.chat_history.append((user_input, corrected))
-        chat_bubble(corrected, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
