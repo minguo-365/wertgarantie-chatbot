@@ -74,7 +74,7 @@ def frage_openrouter(nachrichten):
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
-if st.button("🩹 Verlauf löschen"):
+if st.button("🯩 Verlauf löschen"):
     st.session_state.chat_history = []
     st.rerun()
 
@@ -82,6 +82,8 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 def chat_bubble(inhalt, align="left", bgcolor="#F1F0F0", avatar_url=None):
+    if inhalt is None:
+        return
     align_css = "right" if align == "right" else "left"
     avatar_html = f"<img src='{avatar_url}' style='width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;' />" if avatar_url else ""
     bubble_html = f"""
@@ -99,13 +101,11 @@ BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
 
 def link_mit_chat_und_link(bot_text, url):
     link = f'<a href="{url}" target="_blank">👉 Hier klicken, um zur Seite zu gelangen</a>'
-    gesamt_text = f"{bot_text}<br>{link}"
-    st.session_state.chat_history.append((None, gesamt_text))
-    chat_bubble(gesamt_text, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+    st.session_state.chat_history.append((None, link))
+    chat_bubble(link, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 for nutzer, bot in st.session_state.chat_history:
-    if nutzer:
-        chat_bubble(nutzer, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    chat_bubble(nutzer, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
     chat_bubble(bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 benutzereingabe = st.chat_input("Ihre Frage eingeben:")
@@ -129,8 +129,7 @@ if benutzereingabe:
     else:
         verlauf = []
         for frage, antwort in st.session_state.chat_history[-6:]:
-            if frage:
-                verlauf.append({"role": "user", "content": frage})
+            if frage: verlauf.append({"role": "user", "content": frage})
             verlauf.append({"role": "assistant", "content": antwort})
 
         nachrichten = [
