@@ -134,7 +134,7 @@ if user_input:
             if st.button("FAQ", key="btn5"):
                 st.session_state.chat_history.append(("Hörgerät-versicherung", "Sie haben Hilfe zur Mitgliedskarte gewählt."))
         with col6:
-            if st.button("Smartwatch-versicherung", key="btn6"):
+            if st.button("Kontakt", key="btn6"):
                 st.session_state.chat_history.append(("Smartwatch-versicherung", "Sie haben Kontakt zum Kundenservice gewählt."))
         with col7:
             if st.button("Kamera-versicherung", key="btn7"):
