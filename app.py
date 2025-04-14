@@ -74,7 +74,7 @@ def frage_openrouter(nachrichten):
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
-if st.button("🩹 Verlauf löschen"):
+if st.button("📅 Verlauf löschen"):
     st.session_state.chat_history = []
     st.rerun()
 
@@ -84,9 +84,14 @@ if "chat_history" not in st.session_state:
 if "show_sub_buttons" not in st.session_state:
     st.session_state.show_sub_buttons = False
 
+# Initialisiere Sub-Button-SessionStates
 for i in range(1, 5):
-    if f"sub_btn_{i}" not in st.session_state:
-        st.session_state[f"sub_btn_{i}"] = False
+    key = f"sub_btn_{i}"
+    if key not in st.session_state:
+        st.session_state[key] = False
+
+USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
+BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
 
 def chat_bubble(inhalt, align="left", bgcolor="#F1F0F0", avatar_url=None):
     if inhalt is None:
@@ -103,11 +108,8 @@ def chat_bubble(inhalt, align="left", bgcolor="#F1F0F0", avatar_url=None):
     """
     st.markdown(bubble_html, unsafe_allow_html=True)
 
-USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
-BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
-
 def link_mit_chat_und_link(bot_text, url):
-    link = f'<a href="{url}" target="_blank">👉 Hier klicken, um zur Seite zu gelangen</a>'
+    link = f'<a href="{url}" target="_blank">🔍 Hier klicken, um zur Seite zu gelangen</a>'
     st.session_state.chat_history.append((None, link))
     chat_bubble(link, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
@@ -149,7 +151,6 @@ if benutzereingabe:
         st.session_state.chat_history.append((benutzereingabe, korrigiert))
         chat_bubble(korrigiert, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-# Immer anzeigen, nicht nur bei Begrüßung
 st.markdown("""---
 **Wählen Sie eine Kategorie:**
 """)
@@ -187,11 +188,9 @@ if st.session_state.show_sub_buttons:
 col2, col3 = st.columns(2)
 with col2:
     if st.button("Werkstätten", key="btn2"):
-        st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
-    if st.session_state.show_sub_buttons:
+        st.session_state.show_sub_buttons = False
         link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche")
 with col3:
     if st.button("Fachhändler", key="btn3"):
-        st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
-    if st.session_state.show_sub_buttons:
+        st.session_state.show_sub_buttons = False
         link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche")
