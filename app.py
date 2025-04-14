@@ -74,7 +74,7 @@ def frage_openrouter(nachrichten):
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
-if st.button("🯩 Verlauf löschen"):
+if st.button("🩹 Verlauf löschen"):
     st.session_state.chat_history = []
     st.rerun()
 
@@ -83,6 +83,10 @@ if "chat_history" not in st.session_state:
 
 if "show_sub_buttons" not in st.session_state:
     st.session_state.show_sub_buttons = False
+
+for i in range(1, 5):
+    if f"sub_btn_{i}" not in st.session_state:
+        st.session_state[f"sub_btn_{i}"] = False
 
 def chat_bubble(inhalt, align="left", bgcolor="#F1F0F0", avatar_url=None):
     if inhalt is None:
@@ -160,13 +164,24 @@ if st.session_state.show_sub_buttons:
     col_a, col_b = st.columns(2)
     with col_a:
         if st.button("📱 Smartphone-Versicherung", key="sub1"):
+            st.session_state.sub_btn_1 = not st.session_state.sub_btn_1
+        if st.session_state.sub_btn_1:
             link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/smartphone")
+
         if st.button("💻 Notebook-Versicherung", key="sub2"):
+            st.session_state.sub_btn_2 = not st.session_state.sub_btn_2
+        if st.session_state.sub_btn_2:
             link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/notebook")
+
     with col_b:
         if st.button("📷 Kamera-Versicherung", key="sub3"):
+            st.session_state.sub_btn_3 = not st.session_state.sub_btn_3
+        if st.session_state.sub_btn_3:
             link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/kamera")
+
         if st.button("📺 Fernseher-Versicherung", key="sub4"):
+            st.session_state.sub_btn_4 = not st.session_state.sub_btn_4
+        if st.session_state.sub_btn_4:
             link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher")
 
 col2, col3 = st.columns(2)
