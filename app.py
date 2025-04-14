@@ -187,7 +187,9 @@ if st.session_state.show_sub_buttons:
 col2, col3 = st.columns(2)
 with col2:
     if st.button("Werkstätten", key="btn2"):
+        st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
         link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche")
 with col3:
     if st.button("Fachhändler", key="btn3"):
+        st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
         link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche")
