@@ -74,21 +74,21 @@ def frage_openrouter(nachrichten):
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
-if st.button("📅 Verlauf löschen"):
+if st.button("🗕 Verlauf löschen"):
     st.session_state.chat_history = []
     st.rerun()
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-if "show_sub_buttons" not in st.session_state:
-    st.session_state.show_sub_buttons = False
-
 # Initialisiere Sub-Button-SessionStates
-for i in range(1, 5):
-    key = f"sub_btn_{i}"
+link_keys = ["show_link_smartphone", "show_link_notebook", "show_link_kamera", "show_link_tv", "show_link_werkstatt", "show_link_haendler"]
+for key in link_keys:
     if key not in st.session_state:
         st.session_state[key] = False
+
+if "show_sub_buttons" not in st.session_state:
+    st.session_state.show_sub_buttons = False
 
 USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
 BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
@@ -108,10 +108,11 @@ def chat_bubble(inhalt, align="left", bgcolor="#F1F0F0", avatar_url=None):
     """
     st.markdown(bubble_html, unsafe_allow_html=True)
 
-def link_mit_chat_und_link(bot_text, url):
-    link = f'<a href="{url}" target="_blank">🔍 Hier klicken, um zur Seite zu gelangen</a>'
-    st.session_state.chat_history.append((None, link))
-    chat_bubble(link, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+def link_mit_chat_und_link(bot_text, url, key):
+    st.session_state[key] = not st.session_state[key]
+    if st.session_state[key]:
+        link = f'<a href="{url}" target="_blank">🔍 Hier klicken, um zur Seite zu gelangen</a>'
+        chat_bubble(link, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 for nutzer, bot in st.session_state.chat_history:
     chat_bubble(nutzer, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
@@ -165,32 +166,20 @@ if st.session_state.show_sub_buttons:
     col_a, col_b = st.columns(2)
     with col_a:
         if st.button("📱 Smartphone-Versicherung", key="sub1"):
-            st.session_state.sub_btn_1 = not st.session_state.sub_btn_1
-        if st.session_state.sub_btn_1:
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/smartphone")
-
+            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/smartphone", "show_link_smartphone")
         if st.button("💻 Notebook-Versicherung", key="sub2"):
-            st.session_state.sub_btn_2 = not st.session_state.sub_btn_2
-        if st.session_state.sub_btn_2:
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/notebook")
+            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/notebook", "show_link_notebook")
 
     with col_b:
         if st.button("📷 Kamera-Versicherung", key="sub3"):
-            st.session_state.sub_btn_3 = not st.session_state.sub_btn_3
-        if st.session_state.sub_btn_3:
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/kamera")
-
+            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/kamera", "show_link_kamera")
         if st.button("📺 Fernseher-Versicherung", key="sub4"):
-            st.session_state.sub_btn_4 = not st.session_state.sub_btn_4
-        if st.session_state.sub_btn_4:
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher")
+            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher", "show_link_tv")
 
 col2, col3 = st.columns(2)
 with col2:
     if st.button("Werkstätten", key="btn2"):
-        st.session_state.show_sub_buttons = False
-        link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche")
+        link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche", "show_link_werkstatt")
 with col3:
     if st.button("Fachhändler", key="btn3"):
-        st.session_state.show_sub_buttons = False
-        link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche")
+        link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
