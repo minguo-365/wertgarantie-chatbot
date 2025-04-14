@@ -147,17 +147,11 @@ st.markdown("""---
 **Wählen Sie eine Kategorie:**
 """)
 
-# Schritt 1: Statusvariable initialisieren
-if "show_sub_buttons" not in st.session_state:
-    st.session_state.show_sub_buttons = False
-
-# Schritt 2: Hauptbutton
 col1 = st.columns(1)[0]
 with col1:
     if st.button("Smartphone-, Waschmaschine-, Kamera-Versicherung", key="btn1"):
-        st.session_state.show_sub_buttons = True  # 当点击后设为 True
+        st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
 
-# Schritt 3: Wenn aktiviert, dann weitere Buttons anzeigen
 if st.session_state.show_sub_buttons:
     st.markdown("**Wählen Sie die Geräteversicherung aus:**")
     col_a, col_b = st.columns(2)
@@ -166,7 +160,6 @@ if st.session_state.show_sub_buttons:
             link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/smartphone")
         if st.button("💻 Notebook-Versicherung", key="sub2"):
             link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/notebook")
-
     with col_b:
         if st.button("📷 Kamera-Versicherung", key="sub3"):
             link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/kamera")
@@ -176,13 +169,7 @@ if st.session_state.show_sub_buttons:
 col2, col3 = st.columns(2)
 with col2:
     if st.button("Werkstätten", key="btn2"):
-        link_mit_chat_und_link(
-            "",
-            "https://www.wertgarantie.de/werkstattsuche"
-        )
+        link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche")
 with col3:
     if st.button("Fachhändler", key="btn3"):
-        link_mit_chat_und_link(
-            "",
-            "https://www.wertgarantie.de/haendlersuche"
-        )
+        link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche")
