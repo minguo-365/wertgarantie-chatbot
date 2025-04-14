@@ -74,12 +74,15 @@ def frage_openrouter(nachrichten):
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
-if st.button("🩹 Verlauf löschen"):
+if st.button("🯩 Verlauf löschen"):
     st.session_state.chat_history = []
     st.rerun()
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
+
+if "show_sub_buttons" not in st.session_state:
+    st.session_state.show_sub_buttons = False
 
 def chat_bubble(inhalt, align="left", bgcolor="#F1F0F0", avatar_url=None):
     if inhalt is None:
@@ -100,7 +103,7 @@ USER_AVATAR = "https://avatars.githubusercontent.com/u/583231?v=4"
 BOT_AVATAR = "https://img.icons8.com/emoji/48/robot-emoji.png"
 
 def link_mit_chat_und_link(bot_text, url):
-    link = f'<a href="{url}" target="_blank">🔗 Hier klicken, um zur Seite zu gelangen</a>'
+    link = f'<a href="{url}" target="_blank">👉 Hier klicken, um zur Seite zu gelangen</a>'
     st.session_state.chat_history.append((None, link))
     chat_bubble(link, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
