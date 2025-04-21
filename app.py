@@ -81,6 +81,7 @@ for nutzer, bot in st.session_state.chat_history:
 # Verarbeitung der Benutzereingabe
 benutzereingabe = st.chat_input("Ihre Frage eingeben:")
 
+if benutzereingabe:
     chat_bubble(benutzereingabe, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
     eingabe = benutzereingabe.strip().lower()
 
@@ -92,9 +93,8 @@ benutzereingabe = st.chat_input("Ihre Frage eingeben:")
         context = get_relevant_chunks(benutzereingabe)
         context_text = "\n".join([c[0] for c in context])
 
-        # Multiround context from previous exchanges
         conversation_history = []
-        for prev_user, prev_bot in st.session_state.chat_history[-6:]:  # letzte 6 Runden merken
+        for prev_user, prev_bot in st.session_state.chat_history[-6:]:
             conversation_history.append({"role": "nutzer", "content": prev_user})
             conversation_history.append({"role": "bot", "content": prev_bot})
 
@@ -124,8 +124,7 @@ benutzereingabe = st.chat_input("Ihre Frage eingeben:")
 
         st.session_state.chat_history.append((benutzereingabe, answer))
         st.chat_message("bot").write(answer)
-        chat_bubble(korrigiert, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
-
+        chat_bubble(answer, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 
 st.markdown("""---
