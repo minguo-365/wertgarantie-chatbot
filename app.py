@@ -16,7 +16,13 @@ def init_vector_store():
     with open("wertgarantie.txt", "r", encoding="utf-8") as f:
         text = f.read()
     chunks = [chunk.strip() for chunk in text.split("\n\n") if len(chunk.strip()) > 50]
-    model = SentenceTransformer("all-MiniLM-L6-v2")
+
+    model_path = "models/all-MiniLM-L6-v2"
+    if not os.path.exists(model_path):
+        st.error(f"Das Modell '{model_path}' wurde nicht gefunden. Bitte stelle sicher, dass es im Projektordner vorhanden ist.")
+        st.stop()
+
+    model = SentenceTransformer(model_path)
     embeddings = model.encode(chunks, show_progress_bar=True)
     index = faiss.IndexFlatL2(embeddings.shape[1])
     index.add(np.array(embeddings))
@@ -24,7 +30,6 @@ def init_vector_store():
 
 model, chunks, index, _ = init_vector_store()
 
-# Suche relevante Textabschnitte basierend auf Benutzeranfrage
 def get_relevant_chunks(query, k=3):
     query_vec = model.encode([query])
     D, I = index.search(np.array(query_vec), k)
@@ -40,8 +45,10 @@ if st.button("🩹  Verlauf löschen"):
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# Initialisiere Sub-Button-SessionStates
-link_keys = ["show_link_smartphone", "show_link_notebook", "show_link_kamera", "show_link_tv", "show_link_werkstatt", "show_link_haendler"]
+link_keys = [
+    "show_link_smartphone", "show_link_notebook", "show_link_kamera",
+    "show_link_tv", "show_link_werkstatt", "show_link_haendler"
+]
 for key in link_keys:
     if key not in st.session_state:
         st.session_state[key] = False
@@ -77,8 +84,6 @@ for nutzer, bot in st.session_state.chat_history:
     chat_bubble(nutzer, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
     chat_bubble(bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-
-# Verarbeitung der Benutzereingabe
 benutzereingabe = st.chat_input("Ihre Frage eingeben:")
 
 if benutzereingabe:
@@ -125,7 +130,6 @@ if benutzereingabe:
         st.session_state.chat_history.append((benutzereingabe, answer))
         st.chat_message("bot").write(answer)
         chat_bubble(answer, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
-
 
 st.markdown("""---
 **Wählen Sie eine Kategorie:**
