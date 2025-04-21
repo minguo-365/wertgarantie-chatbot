@@ -114,8 +114,12 @@ if benutzereingabe:
             verlauf.append({"role": "assistant", "content": antwort})
 
         nachrichten = [
-            {"role": "system", "content": "Sie sind ein professioneller Kundenservice-Chatbot. Bitte antworten Sie hilfreich und korrekt auf Deutsch, möglichst prägnant und höflich."}
-        ] + verlauf + [{"role": "user", "content": benutzereingabe}]
+            {"role": "system", "content": (
+                    "Sie sind ein professioneller Kundenservice-Chatbot für eine deutsche Versicherung. "
+                    "Bitte antworten Sie ausschließlich auf Deutsch, in korrektem, höflichem Ton (durchgehend Siezen). "
+                    "Achten Sie besonders auf Rechtschreibung, Grammatik und technische Fachbegriffe. "
+                    "Ihre Antworten sollen klar, vertrauenswürdig und hilfreich sein. Geben Sie, falls relevant, zuerst eine hilfreiche Einschätzung und schlagen Sie danach passend ein Versicherungsprodukt vor."
+                )}] + verlauf + [{"role": "user", "content": benutzereingabe}]
 
         antwort = frage_openrouter(nachrichten)
         st.session_state.chat_history.append((benutzereingabe, antwort))
