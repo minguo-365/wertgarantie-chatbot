@@ -95,8 +95,8 @@ benutzereingabe = st.chat_input("Ihre Frage eingeben:")
         # Multiround context from previous exchanges
         conversation_history = []
         for prev_user, prev_bot in st.session_state.chat_history[-6:]:  # letzte 6 Runden merken
-            conversation_history.append({"role": "user", "content": prev_user})
-            conversation_history.append({"role": "assistant", "content": prev_bot})
+            conversation_history.append({"role": "nutzer", "content": prev_user})
+            conversation_history.append({"role": "bot", "content": prev_bot})
 
         messages = [
             {
@@ -110,8 +110,8 @@ benutzereingabe = st.chat_input("Ihre Frage eingeben:")
             }
         ] + conversation_history + [
             {
-                "role": "user",
-                "content": f"Relevante Informationen:\n{context_text}\n\nFrage: {user_input}"
+                "role": "nutzer",
+                "content": f"Relevante Informationen:\n{context_text}\n\nFrage: {benutzereingabe}"
             }
         ]
 
@@ -123,7 +123,7 @@ benutzereingabe = st.chat_input("Ihre Frage eingeben:")
         answer = response.choices[0].message.content
 
         st.session_state.chat_history.append((benutzereingabe, answer))
-        st.chat_message("assistant").write(answer)
+        st.chat_message("bot").write(answer)
         chat_bubble(korrigiert, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 
