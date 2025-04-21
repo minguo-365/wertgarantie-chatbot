@@ -131,7 +131,7 @@ st.markdown("""---
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    if st.button("Smartphone-, Waschmaschine-, Kamera-Versicherung", key="btn1"):
+    if st.button("Versicherung", key="btn1"):
         st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
 
 if st.session_state.show_sub_buttons:
