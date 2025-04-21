@@ -24,6 +24,12 @@ def init_vector_store():
 
 model, chunks, index, _ = init_vector_store()
 
+# Suche relevante Textabschnitte basierend auf Benutzeranfrage
+def get_relevant_chunks(query, k=3):
+    query_vec = model.encode([query])
+    D, I = index.search(np.array(query_vec), k)
+    return [(chunks[i], i) for i in I[0]]
+
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
