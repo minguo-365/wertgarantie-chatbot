@@ -155,7 +155,8 @@ with col3:
     if st.button("Fachhändler", key="btn3"):
         link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
 
-col4 = st.columns(1)[0]
+#col4 = st.columns(1)[0]
+col4, col5 = st.columns(2)
 with col4:
     if st.button("FAQ", key="btn4"):
         link_mit_chat_und_link("", "https://www.wertgarantie.de/service/haeufige-fragen?question=116241&title=was-passiert-wenn-ein-schaden-eintritt", "show_link_FAQ")
