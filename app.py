@@ -71,21 +71,19 @@ for nutzer, bot in st.session_state.chat_history:
     chat_bubble(nutzer, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
     chat_bubble(bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-benutzereingabe = st.chat_input("Ihre Frage eingeben:")
 
 # Verarbeitung der Benutzereingabe
-if user_input:
-    st.chat_message("user").write(user_input)
+benutzereingabe = st.chat_input("Ihre Frage eingeben:")
 
-    # Sonderfall: Begrüßung erkennen und sofort antworten
-    if user_input.lower().strip() in ["hallo", "hi", "guten tag", "hey"]:
-        welcome_reply = (
-            "Hallo und willkommen bei uns! Wie kann ich für Sie helfen? Haben Sie Fragen zum Tarif, zum Angebot oder zur Anmeldung? Ich möchte gern helfen."
-        )
-        st.session_state.chat_history.append((user_input, welcome_reply))
-        st.chat_message("assistant").write(welcome_reply)
+    chat_bubble(benutzereingabe, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    eingabe = benutzereingabe.strip().lower()
+
+    if eingabe in ["hallo", "hi", "guten tag", "hey"]:
+        willkommen = "Hallo und willkommen bei Wertgarantie! Was kann ich für Sie tun?"
+        st.session_state.chat_history.append((benutzereingabe, willkommen))
+        chat_bubble(willkommen, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
     else:
-        context = get_relevant_chunks(user_input)
+        context = get_relevant_chunks(benutzereingabe)
         context_text = "\n".join([c[0] for c in context])
 
         # Multiround context from previous exchanges
@@ -118,44 +116,11 @@ if user_input:
 
         answer = response.choices[0].message.content
 
-        st.session_state.chat_history.append((user_input, answer))
+        st.session_state.chat_history.append((benutzereingabe, answer))
         st.chat_message("assistant").write(answer)
-
-
-
-
-if benutzereingabe:
-    chat_bubble(benutzereingabe, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
-    eingabe = benutzereingabe.strip().lower()
-
-    if eingabe in ["hallo", "hi", "guten tag", "hey"]:
-        willkommen = "Hallo und willkommen bei Wertgarantie! Was kann ich für Sie tun?"
-        st.session_state.chat_history.append((benutzereingabe, willkommen))
-        chat_bubble(willkommen, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
-
-    elif any(stichwort in eingabe for stichwort in ["versicherung", "schaden"]):
-        antwort = (
-            "WERTGARANTIE bietet verschiedene Versicherungen an, darunter Schutz für Smartphones, Tablets, Laptops, E-Bikes/Fahrräder, Hörgeräte sowie Haushalts- und Unterhaltungselektronik. "
-            "Unsere Produkte bieten umfassenden Schutz vor Reparaturkosten, Diebstahl und technischen Defekten. Möchten Sie zu einem bestimmten Gerät mehr erfahren?"
-        )
-        st.session_state.chat_history.append((benutzereingabe, antwort))
-        chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
-
-    else:
-        verlauf = []
-        for frage, antwort in st.session_state.chat_history[-6:]:
-            if frage: verlauf.append({"role": "user", "content": frage})
-            verlauf.append({"role": "assistant", "content": antwort})
-
-        nachrichten = [
-            {"role": "system", "content": "Sie sind ein professioneller Kundenservice-Chatbot. Bitte antworten Sie hilfreich und korrekt auf Deutsch, möglichst prägnant und höflich."}
-        ] + verlauf + [{"role": "user", "content": benutzereingabe}]
-
-        antwort = frage_openrouter(nachrichten)
-        antwort = entferne_nicht_deutsch(antwort)
-        korrigiert = grammatik_korrigieren(antwort)
-        st.session_state.chat_history.append((benutzereingabe, korrigiert))
         chat_bubble(korrigiert, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+
+
 
 st.markdown("""---
 **Wählen Sie eine Kategorie:**
