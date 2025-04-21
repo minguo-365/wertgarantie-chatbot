@@ -129,7 +129,7 @@ st.markdown("""---
 **Wählen Sie eine Kategorie:**
 """)
 
-col1 = st.columns(1)[0]
+col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("Smartphone-, Waschmaschine-, Kamera-Versicherung", key="btn1"):
         st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
@@ -148,11 +148,17 @@ if st.session_state.show_sub_buttons:
             link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/kamera", "show_link_kamera")
         if st.button("📺 Fernseher-Versicherung", key="sub4"):
             link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher", "show_link_tv")
-
-col2, col3 = st.columns(2)
 with col2:
     if st.button("Werkstätten", key="btn2"):
         link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche", "show_link_werkstatt")
 with col3:
     if st.button("Fachhändler", key="btn3"):
         link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
+
+col4 = st.columns(1)[0]
+with col4:
+    if st.button("FAQ", key="btn4"):
+        link_mit_chat_und_link("", "https://www.wertgarantie.de/service/haeufige-fragen?question=116241&title=was-passiert-wenn-ein-schaden-eintritt", "show_link_FAQ")
+with col5:
+    if st.button("Handy Erste Hilfe", key="btn5"):
+        link_mit_chat_und_link("", "https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren", "show_link_handy_erste_hilfe")
