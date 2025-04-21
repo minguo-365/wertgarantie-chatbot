@@ -156,10 +156,10 @@ with col3:
         link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
 
 #col4 = st.columns(1)[0]
-col4, col5 = st.columns(2)
-with col4:
-    if st.button("FAQ", key="btn1"):
-        link_mit_chat_und_link("", "https://www.wertgarantie.de/service/haeufige-fragen?question=116241&title=was-passiert-wenn-ein-schaden-eintritt", "show_link_FAQ")
-with col5:
-    if st.button("Handy Erste Hilfe", key="btn2"):
-        link_mit_chat_und_link("", "https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren", "show_link_handy_erste_hilfe")
+#col4, col5 = st.columns(2)
+#with col4:
+    #if st.button("FAQ", key="btn1"):
+        #link_mit_chat_und_link("", "https://www.wertgarantie.de/service/haeufige-fragen?question=116241&title=was-passiert-wenn-ein-schaden-eintritt", "show_link_FAQ")
+#with col5:
+    #if st.button("Handy Erste Hilfe", key="btn2"):
+        #link_mit_chat_und_link("", "https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren", "show_link_handy_erste_hilfe")
