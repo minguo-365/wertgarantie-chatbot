@@ -29,27 +29,6 @@ def get_relevante_abschnitte(anfrage, k=3):
     D, I = index.search(np.array(anfrage_vektor), k)
     return [(chunks[i], i) for i in I[0]]
 
-def grammatik_korrigieren(text):
-    try:
-        response = requests.post(
-            "https://api.languagetoolplus.com/v2/check",
-            data={"text": text, "language": "de-DE"},
-            headers={"Content-Type": "application/x-www-form-urlencoded"}
-        )
-        matches = response.json().get("matches", [])
-        for match in reversed(matches):
-            offset = match["offset"]
-            length = match["length"]
-            replacement = match["replacements"][0]["value"] if match["replacements"] else ""
-            text = text[:offset] + replacement + text[offset+length:]
-        return text
-    except:
-        return text
-
-def entferne_nicht_deutsch(text):
-    text = re.sub(r'[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]+', '', text)
-    text = re.sub(r'Es tut mir leid, dazu habe ich leider keine Informationen\.', '', text)
-    return text.strip()
 
 def frage_openrouter(nachrichten):
     try:
@@ -128,14 +107,6 @@ if benutzereingabe:
         st.session_state.chat_history.append((benutzereingabe, willkommen))
         chat_bubble(willkommen, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-    elif any(stichwort in eingabe for stichwort in ["versicherung", "schaden"]):
-        antwort = (
-            "WERTGARANTIE bietet verschiedene Versicherungen an, darunter Schutz für Smartphones, Tablets, Laptops, E-Bikes/Fahrräder, Hörgeräte sowie Haushalts- und Unterhaltungselektronik. "
-            "Unsere Produkte bieten umfassenden Schutz vor Reparaturkosten, Diebstahl und technischen Defekten. Möchten Sie zu einem bestimmten Gerät mehr erfahren?"
-        )
-        st.session_state.chat_history.append((benutzereingabe, antwort))
-        chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
-
     else:
         verlauf = []
         for frage, antwort in st.session_state.chat_history[-6:]:
@@ -147,10 +118,8 @@ if benutzereingabe:
         ] + verlauf + [{"role": "user", "content": benutzereingabe}]
 
         antwort = frage_openrouter(nachrichten)
-        antwort = entferne_nicht_deutsch(antwort)
-        korrigiert = grammatik_korrigieren(antwort)
-        st.session_state.chat_history.append((benutzereingabe, korrigiert))
-        chat_bubble(korrigiert, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+        st.session_state.chat_history.append((benutzereingabe, antwort))
+        chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 st.markdown("""---
 **Wählen Sie eine Kategorie:**
