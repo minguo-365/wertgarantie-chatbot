@@ -24,53 +24,6 @@ def init_vector_store():
 
 model, chunks, index, _ = init_vector_store()
 
-def get_relevante_abschnitte(anfrage, k=3):
-    anfrage_vektor = model.encode([anfrage])
-    D, I = index.search(np.array(anfrage_vektor), k)
-    return [(chunks[i], i) for i in I[0]]
-
-def grammatik_korrigieren(text):
-    try:
-        response = requests.post(
-            "https://api.languagetoolplus.com/v2/check",
-            data={"text": text, "language": "de-DE"},
-            headers={"Content-Type": "application/x-www-form-urlencoded"}
-        )
-        matches = response.json().get("matches", [])
-        for match in reversed(matches):
-            offset = match["offset"]
-            length = match["length"]
-            replacement = match["replacements"][0]["value"] if match["replacements"] else ""
-            text = text[:offset] + replacement + text[offset+length:]
-        return text
-    except:
-        return text
-
-def entferne_nicht_deutsch(text):
-    text = re.sub(r'[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]+', '', text)
-    text = re.sub(r'Es tut mir leid, dazu habe ich leider keine Informationen\.', '', text)
-    return text.strip()
-
-def frage_openrouter(nachrichten):
-    try:
-        response = client.chat.completions.create(
-            model="mistralai/mistral-7b-instruct",
-            messages=nachrichten
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        if "code': 402" in str(e).lower() or "insuffizien" in str(e).lower():
-            try:
-                response = client.chat.completions.create(
-                    model="mistralai/mistral-7b-instruct:free",
-                    messages=nachrichten
-                )
-                return response.choices[0].message.content
-            except Exception as e2:
-                return f"❌ Auch das kostenlose Modell schlug fehl: {e2}"
-        else:
-            return f"❌ OpenRouter Fehler: {e}"
-
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
@@ -119,6 +72,58 @@ for nutzer, bot in st.session_state.chat_history:
     chat_bubble(bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 benutzereingabe = st.chat_input("Ihre Frage eingeben:")
+
+# Verarbeitung der Benutzereingabe
+if user_input:
+    st.chat_message("user").write(user_input)
+
+    # Sonderfall: Begrüßung erkennen und sofort antworten
+    if user_input.lower().strip() in ["hallo", "hi", "guten tag", "hey"]:
+        welcome_reply = (
+            "Hallo und willkommen bei uns! Wie kann ich für Sie helfen? Haben Sie Fragen zum Tarif, zum Angebot oder zur Anmeldung? Ich möchte gern helfen."
+        )
+        st.session_state.chat_history.append((user_input, welcome_reply))
+        st.chat_message("assistant").write(welcome_reply)
+    else:
+        context = get_relevant_chunks(user_input)
+        context_text = "\n".join([c[0] for c in context])
+
+        # Multiround context from previous exchanges
+        conversation_history = []
+        for prev_user, prev_bot in st.session_state.chat_history[-6:]:  # letzte 6 Runden merken
+            conversation_history.append({"role": "user", "content": prev_user})
+            conversation_history.append({"role": "assistant", "content": prev_bot})
+
+        messages = [
+            {
+                "role": "system",
+                "content": (
+                    "Sie sind ein professioneller Kundenservice-Chatbot für eine deutsche Versicherung. "
+                    "Bitte antworten Sie ausschließlich auf Deutsch, in korrektem, höflichem Ton (durchgehend Siezen). "
+                    "Achten Sie besonders auf Rechtschreibung, Grammatik und technische Fachbegriffe. "
+                    "Ihre Antworten sollen klar, vertrauenswürdig und hilfreich sein. Geben Sie, falls relevant, zuerst eine hilfreiche Einschätzung und schlagen Sie danach passend ein Versicherungsprodukt vor."
+                )
+            }
+        ] + conversation_history + [
+            {
+                "role": "user",
+                "content": f"Relevante Informationen:\n{context_text}\n\nFrage: {user_input}"
+            }
+        ]
+
+        response = client.chat.completions.create(
+            model="mistralai/mistral-7b-instruct:free",
+            messages=messages
+        )
+
+        answer = response.choices[0].message.content
+
+        st.session_state.chat_history.append((user_input, answer))
+        st.chat_message("assistant").write(answer)
+
+
+
+
 if benutzereingabe:
     chat_bubble(benutzereingabe, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
     eingabe = benutzereingabe.strip().lower()
