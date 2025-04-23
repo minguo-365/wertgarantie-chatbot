@@ -126,7 +126,7 @@ if benutzereingabe:
         chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
 
-if not benutzereingabe and not st.session_state.get('chat_history', []):
+if not st.session_state.get('chat_history', []):
     st.markdown("""---
 **Wählen Sie eine Kategorie:**
 """)
@@ -138,24 +138,32 @@ with col1:
 
 if st.session_state.show_sub_buttons:
     st.markdown("**Wählen Sie die Geräteversicherung aus:**")
-    col_a, col_b = st.columns(2)
-    with col_a:
-        if st.button("📱 Smartphone-Versicherung", key="sub1"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/smartphone", "show_link_smartphone")
-        if st.button("💻 Notebook-Versicherung", key="sub2"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/notebook", "show_link_notebook")
+ col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("Versicherung", key="btn1"):
+            st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
 
-    with col_b:
-        if st.button("📷 Kamera-Versicherung", key="sub3"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/kamera", "show_link_kamera")
-        if st.button("📺 Fernseher-Versicherung", key="sub4"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher", "show_link_tv")
-with col2:
-    if st.button("Werkstätten", key="btn2"):
-        link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche", "show_link_werkstatt")
-with col3:
-    if st.button("Fachhändler", key="btn3"):
-        link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
+    if st.session_state.get('show_sub_buttons', False):
+        st.markdown("**Wählen Sie die Geräteversicherung aus:**")
+        col_a, col_b = st.columns(2)
+        with col_a:
+            if st.button("📱 Smartphone-Versicherung", key="sub1"):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/smartphone", "show_link_smartphone")
+            if st.button("💻 Notebook-Versicherung", key="sub2"):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/notebook", "show_link_notebook")
+
+        with col_b:
+            if st.button("📷 Kamera-Versicherung", key="sub3"):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/kamera", "show_link_kamera")
+            if st.button("📺 Fernseher-Versicherung", key="sub4"):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher", "show_link_tv")
+    with col2:
+        if st.button("Werkstätten", key="btn2"):
+            link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche", "show_link_werkstatt")
+    with col3:
+        if st.button("Fachhändler", key="btn3"):
+            link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
+
 
 #col4 = st.columns(1)[0]
 #col4, col5 = st.columns(2)
