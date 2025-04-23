@@ -1,14 +1,4 @@
 import streamlit as st
-st.markdown(
-    """
-    <style>
-    .main .block-container {
-        background-color: #1a237e;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 import os
 import faiss
 import numpy as np
@@ -17,6 +7,22 @@ from sentence_transformers import SentenceTransformer
 import re
 import requests
 
+
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #1a237e;  /* Dunkelblau */
+        color: white;  /* Textfarbe auf Weiß setzen */
+    }
+    /* Chat-Blase an dunklen Hintergrund anpassen */
+    .stChatMessage {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 st.set_page_config(page_title="🤖 Willkommen", layout="wide")
 
 client = OpenAI(api_key=st.secrets["OPENROUTER_API_KEY"], base_url="https://openrouter.ai/api/v1")
