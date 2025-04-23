@@ -98,7 +98,7 @@ if "show_kategorie" not in st.session_state:
 
     
 if st.button("🩹  Verlauf löschen"):
-   st.session_state.chat_history = []
+    st.session_state.chat_history = []
     st.session_state.show_kategorie = True  
     st.session_state.show_sub_buttons = False  
     st.rerun()
