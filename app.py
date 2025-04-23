@@ -130,14 +130,6 @@ if not st.session_state.get('chat_history', []):
     st.markdown("""---
 **Wählen Sie eine Kategorie:**
 """)
-
-col1, col2, col3 = st.columns(3)
-with col1:
-    if st.button("Versicherung", key="btn1"):
-        st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
-
-if st.session_state.show_sub_buttons:
-    st.markdown("**Wählen Sie die Geräteversicherung aus:**")
  col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("Versicherung", key="btn1"):
