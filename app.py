@@ -125,7 +125,9 @@ if benutzereingabe:
         st.session_state.chat_history.append((benutzereingabe, antwort))
         chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
-st.markdown("""---
+
+if not st.session_state.chat_history:
+    st.markdown("""---
 **Wählen Sie eine Kategorie:**
 """)
 
