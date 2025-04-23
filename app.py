@@ -8,20 +8,6 @@ import re
 import requests
 
 st.set_page_config(page_title="🤖 Willkommen", layout="wide")
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background-color: #1a237e;  /* Dunkelblau */
-        color: white;
-    }
-    .stChatMessage {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 client = OpenAI(api_key=st.secrets["OPENROUTER_API_KEY"], base_url="https://openrouter.ai/api/v1")
 
