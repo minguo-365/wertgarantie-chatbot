@@ -53,10 +53,6 @@ def frage_openrouter(nachrichten):
 st.title("🤖 Willkommen")
 st.markdown("**Ich bin Ihr digitaler Assistent.**")
 
-if st.button("🩹  Verlauf löschen"):
-    st.session_state.chat_history = []
-    st.rerun()
-
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -96,6 +92,16 @@ def link_mit_chat_und_link(bot_text, url, key):
 for nutzer, bot in st.session_state.chat_history:
     chat_bubble(nutzer, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
     chat_bubble(bot, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+    
+if "show_kategorie" not in st.session_state:
+    st.session_state.show_kategorie = True
+
+    
+if st.button("🩹  Verlauf löschen"):
+   st.session_state.chat_history = []
+    st.session_state.show_kategorie = True  
+    st.session_state.show_sub_buttons = False  
+    st.rerun()
 
 benutzereingabe = st.chat_input("Ihre Frage eingeben:")
 if benutzereingabe:
