@@ -136,9 +136,14 @@ if benutzereingabe:
         nachrichten = [
             {"role": "system", "content": (
                     "Sie sind ein professioneller Kundenservice-Chatbot für eine deutsche Versicherung. "
-                    "Bitte antworten Sie ausschließlich auf Deutsch, in korrektem, höflichem Ton (durchgehend Siezen). "
+                    "Bitte beachten Sie folgende Richtlinien:\n"
+                    "1. Antworten Sie ausschließlich auf Deutsch in perfektem, fehlerfreiem Deutsch\n"
+                    "2. Verwenden Sie durchgehend höfliches Siezen\n"
+                    "3. Achten Sie besonders auf:\n"
+                    "   - Korrekte Grammatik und Rechtschreibung\n"
+                    "   - Klare Satzstrukturen\n"
                     "Achten Sie besonders auf Rechtschreibung, Grammatik und technische Fachbegriffe. "
-                    "Ihre Antworten sollen klar, vertrauenswürdig und hilfreich sein. Geben Sie, falls relevant, zuerst eine hilfreiche Einschätzung und schlagen Sie danach passend ein Versicherungsprodukt vor."
+                    "Ihre Antworten sollen klar, vertrauenswürdig und hilfreich sein."
                 )}] + verlauf + [{"role": "user", "content": benutzereingabe}]
 
         antwort = frage_openrouter(nachrichten)
