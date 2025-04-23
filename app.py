@@ -1,4 +1,14 @@
 import streamlit as st
+st.markdown(
+    """
+    <style>
+    .main .block-container {
+        background-color: #1a237e;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 import os
 import faiss
 import numpy as np
