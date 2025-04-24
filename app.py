@@ -194,7 +194,7 @@ if not st.session_state.get('chat_history', []):
     st.markdown("""---
 **Wählen Sie eine Kategorie:**
 """)
-    col1, col2, col3 = st.columns(4)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         if st.button("Versicherung", key="btn1"):
             st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
