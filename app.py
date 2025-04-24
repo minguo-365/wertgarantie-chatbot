@@ -8,26 +8,6 @@ import re
 import requests
 
 st.set_page_config(page_title="🤖 Willkommen", layout="wide")
-# Hintergrund auf Blau ändern (hier: #1E90FF = DodgerBlue)
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background-color: #1E90FF;
-    }
-    /* Behalten Sie die Originalfarben für Chat-Blase bei */
-    .stChatMessage {
-        background-color: #F1F0F0 !important;
-    }
-    /* Button-Stile beibehalten */
-    .stButton>button {
-        background-color: #f0f2f6;
-        color: #000000;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 client = OpenAI(api_key=st.secrets["OPENROUTER_API_KEY"], base_url="https://openrouter.ai/api/v1")
 
