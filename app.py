@@ -237,7 +237,7 @@ if not st.session_state.get('chat_history', []):
         with col_c:
              if st.button("📱 Handy Selbstreparatur", key ="sub5"):
                  link_mit_chat_link("","https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren","show_link_ersteHilfe")
-            if st.button(" Haushalt Selbstreparatur", key ="sub6"):
+             if st.button(" Haushalt Selbstreparatur", key ="sub6"):
                  link_mit_chat_link("","https://www.wertgarantie.de/ratgeber/elektronik/haushalt-garten/selbst-reparieren","show_link_haushaltSelbstreparatur")
             
 
