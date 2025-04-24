@@ -221,7 +221,7 @@ if not st.session_state.get('chat_history', []):
 
         with col_b:
             if st.button("📷 Kamera-Versicherung", key="sub3"):
-                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/kamera", "show_link_kamera")
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung/kamera#/", "show_link_kamera")
             if st.button("📺 Fernseher-Versicherung", key="sub4"):
                 link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher", "show_link_tv")        
 
