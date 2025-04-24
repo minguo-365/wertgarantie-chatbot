@@ -81,7 +81,7 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 # Initialisiere Sub-Button-SessionStates
-link_keys = ["show_link_smartphone", "show_link_notebook", "show_link_kamera", "show_link_tv", "show_link_werkstatt", "show_link_haendler"]
+link_keys = ["show_link_smartphone", "show_link_notebook", "show_link_kamera", "show_link_tv", "show_link_werkstatt", "show_link_haendler","show_link_ersteHilfe"]
 for key in link_keys:
     if key not in st.session_state:
         st.session_state[key] = False
@@ -194,7 +194,7 @@ if not st.session_state.get('chat_history', []):
     st.markdown("""---
 **Wählen Sie eine Kategorie:**
 """)
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns(4)
     with col1:
         if st.button("Versicherung", key="btn1"):
             st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
@@ -219,6 +219,9 @@ if not st.session_state.get('chat_history', []):
     with col3:
         if st.button("Fachhändler", key="btn3"):
             link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
+    with col4: 
+        if st.button("Erste Hilfe", key="btn4"):
+            link_mit_chat_und_link("", "https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren", "show_link_ersteHilfe")
 
 
 #col4 = st.columns(1)[0]
