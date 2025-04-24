@@ -215,7 +215,7 @@ if not st.session_state.get('chat_history', []):
         col_a, col_b = st.columns(2)
         with col_a:
             if st.button("📱 Smartphone-Versicherung", key="sub1"):
-                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/smartphone", "show_link_smartphone")
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung/smartphone#/buchung/1", "show_link_smartphone")
             if st.button("💻 Notebook-Versicherung", key="sub2"):
                 link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/notebook", "show_link_notebook")
 
