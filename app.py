@@ -204,20 +204,30 @@ if not st.session_state.get('chat_history', []):
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
+        # Reset all sub-button states when any main button is clicked
         if st.button("Versicherung", key="btn1"):
-            st.session_state['show_versicherung'] = not st.session_state.get('show_versicherung', False)
-
+            st.session_state['show_versicherung'] = True
+            st.session_state['show_werkstaetten'] = False
+            st.session_state['show_haendler'] = False
+            st.session_state['show_erstehilfe'] = False
     with col2:
         if st.button("Werkstätten", key="btn2"):
-            st.session_state['show_werkstaetten'] = not st.session_state.get('show_werkstaetten', False)
-
+            st.session_state['show_versicherung'] = False
+            st.session_state['show_werkstaetten'] = True
+            st.session_state['show_haendler'] = False
+            st.session_state['show_erstehilfe'] = False
     with col3:
         if st.button("Fachhändler", key="btn3"):
-            st.session_state['show_haendler'] = not st.session_state.get('show_haendler', False)
-
+            st.session_state['show_versicherung'] = False
+            st.session_state['show_werkstaetten'] = False
+            st.session_state['show_haendler'] = True
+            st.session_state['show_erstehilfe'] = False
     with col4:
         if st.button("Erste Hilfe", key="btn4"):
-            st.session_state['show_erstehilfe'] = not st.session_state.get('show_erstehilfe', False)
+            st.session_state['show_versicherung'] = False
+            st.session_state['show_werkstaetten'] = False
+            st.session_state['show_haendler'] = False
+            st.session_state['show_erstehilfe'] = True
 
 
     if st.session_state.get('show_versicherung', False):
@@ -246,7 +256,7 @@ if not st.session_state.get('chat_history', []):
 
     if st.session_state.get('show_erstehilfe', False):
         st.markdown("**Wählen Sie die Erste Hilfe aus:**")
-        col_c = st.columns(1)[0]
+        col_c, col_d = st.columns(2)
         with col_c:
              if st.button("📱 Handy Selbstreparatur", key ="sub5"):
                  link_mit_chat_link("","https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren","show_link_ersteHilfe")
