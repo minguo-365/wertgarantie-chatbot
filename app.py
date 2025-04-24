@@ -202,11 +202,25 @@ if not st.session_state.get('chat_history', []):
 **Wählen Sie eine Kategorie:**
 """)
     col1, col2, col3, col4 = st.columns(4)
+
     with col1:
         if st.button("Versicherung", key="btn1"):
-            st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
+            st.session_state['show_versicherung'] = not st.session_state.get('show_versicherung', False)
 
-    if st.session_state.get('show_sub_buttons', False):
+    with col2:
+        if st.button("Werkstätten", key="btn2"):
+            st.session_state['show_werkstaetten'] = not st.session_state.get('show_werkstaetten', False)
+
+    with col3:
+        if st.button("Fachhändler", key="btn3"):
+            st.session_state['show_haendler'] = not st.session_state.get('show_haendler', False)
+
+    with col4:
+        if st.button("Erste Hilfe", key="btn4"):
+            st.session_state['show_erstehilfe'] = not st.session_state.get('show_erstehilfe', False)
+
+
+    if st.session_state.get('show_versicherung', False):
         st.markdown("**Wählen Sie die Geräteversicherung aus:**")
         col_a, col_b = st.columns(2)
         with col_a:
@@ -219,19 +233,18 @@ if not st.session_state.get('chat_history', []):
             if st.button("📷 Kamera-Versicherung", key="sub3"):
                 link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/kamera", "show_link_kamera")
             if st.button("📺 Fernseher-Versicherung", key="sub4"):
-                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher", "show_link_tv")
-    with col2:
-        if st.button("Werkstätten", key="btn2"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche", "show_link_werkstatt")
-    with col3:
-        if st.button("Fachhändler", key="btn3"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
-            
-    with col4: 
-        if st.button("Erste Hilfe", key="btn4"):
-            st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
-            #link_mit_chat_und_link("", "https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren", "show_link_ersteHilfe")
-    if st.session_state.get('show_sub_buttons', False):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher", "show_link_tv")        
+
+
+    if st.session_state.get('show_werkstaetten', False):#
+        link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche", "show_link_werkstatt")
+    
+        
+    if st.session_state.get('show_haendler', False):
+        link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
+
+
+    if st.session_state.get('show_erstehilfe', False):
         st.markdown("**Wählen Sie die Erste Hilfe aus:**")
         col_c, col_d = st.columns(2)
         with col_c:
@@ -239,8 +252,7 @@ if not st.session_state.get('chat_history', []):
                  link_mit_chat_link("","https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren","show_link_ersteHilfe")
              if st.button(" Haushalt Selbstreparatur", key ="sub6"):
                  link_mit_chat_link("","https://www.wertgarantie.de/ratgeber/elektronik/haushalt-garten/selbst-reparieren","show_link_haushaltSelbstreparatur")
-            
-
+                    
 #col4 = st.columns(1)[0]
 #col4, col5 = st.columns(2)
 #with col4:
