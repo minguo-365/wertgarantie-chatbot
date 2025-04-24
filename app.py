@@ -246,7 +246,7 @@ if not st.session_state.get('chat_history', []):
 
     if st.session_state.get('show_erstehilfe', False):
         st.markdown("**Wählen Sie die Erste Hilfe aus:**")
-        col_c, col_d = st.columns(2)
+        col_c = st.columns(1)[0]
         with col_c:
              if st.button("📱 Handy Selbstreparatur", key ="sub5"):
                  link_mit_chat_link("","https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren","show_link_ersteHilfe")
