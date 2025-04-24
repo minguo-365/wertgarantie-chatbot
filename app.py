@@ -81,7 +81,14 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 # Initialisiere Sub-Button-SessionStates
-link_keys = ["show_link_smartphone", "show_link_notebook", "show_link_kamera", "show_link_tv", "show_link_werkstatt", "show_link_haendler","show_link_ersteHilfe"]
+link_keys = ["show_link_smartphone", 
+             "show_link_notebook", 
+             "show_link_kamera", 
+             "show_link_tv",
+             "show_link_werkstatt",
+             "show_link_haendler",
+             "show_link_ersteHilfe",
+             "show_link_haushaltSelbstreparatur"]
 for key in link_keys:
     if key not in st.session_state:
         st.session_state[key] = False
@@ -219,10 +226,19 @@ if not st.session_state.get('chat_history', []):
     with col3:
         if st.button("Fachhändler", key="btn3"):
             link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
+            
     with col4: 
         if st.button("Erste Hilfe", key="btn4"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren", "show_link_ersteHilfe")
-
+            #link_mit_chat_und_link("", "https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren", "show_link_ersteHilfe")
+    if st.session_state.get('show_sub_buttons', False):
+        st.markdown("**Wählen Sie die Erste Hilfe aus:**")
+        col_c, col_d = st.columns(2)
+        with col_c:
+             if st.button("📱 Handy Selbstreparatur", key ="sub5"):
+                 link_mit_chat_link("","https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren","show_link_ersteHilfe")
+            if st.button(" Haushalt Selbstreparatur", key ="sub6"):
+                 link_mit_chat_link("","https://www.wertgarantie.de/ratgeber/elektronik/haushalt-garten/selbst-reparieren","show_link_haushaltSelbstreparatur")
+            
 
 #col4 = st.columns(1)[0]
 #col4, col5 = st.columns(2)
