@@ -229,7 +229,7 @@ if not st.session_state.get('chat_history', []):
             
     with col4: 
         if st.button("Erste Hilfe", key="btn4"):
-            st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
+            #st.session_state.show_sub_buttons = not st.session_state.show_sub_buttons
             #link_mit_chat_und_link("", "https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren", "show_link_ersteHilfe")
     if st.session_state.get('show_sub_buttons', False):
         st.markdown("**Wählen Sie die Erste Hilfe aus:**")
