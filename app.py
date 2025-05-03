@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
+import time
 import faiss
 import numpy as np
 import statsmodels.api as sm
@@ -148,12 +149,32 @@ if user_input:
             {"role": "user", "content": f"Relevante Inhalte:\n{context_text}\n\nFrage: {user_input}"}
         ]
 
-        antwort = frage_openrouter(nachrichten)
 
-        chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
-        chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
 
-        st.session_state.chat_history.append((user_input, antwort))
+antwort_placeholder = st.empty()
+progress_bar = st.progress(0)
+
+antwort_placeholder.markdown(f"""
+<div style='text-align: left; display: flex; margin: 10px 0;'>
+    <img src='{BOT_AVATAR}' style='width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;' />
+    <div style='background-color: #e0e0e0; padding: 10px 15px; border-radius: 10px; max-width: 80%;'>
+        ...
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+for percent in range(50):
+    time.sleep(0.02)
+    progress_bar.progress((percent + 1))
+
+antwort = frage_openrouter(nachrichten)
+antwort_placeholder.empty()
+progress_bar.empty()
+
+chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+st.session_state.chat_history.append((user_input, antwort))
+
 
 if st.session_state.frage_schritt > 0:
     st.subheader("📋 Bitte beantworten Sie folgende Fragen:")
