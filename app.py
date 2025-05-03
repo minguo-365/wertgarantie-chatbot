@@ -149,8 +149,11 @@ if user_input:
         ]
 
         antwort = frage_openrouter(nachrichten)
-        st.session_state.chat_history.append((user_input, antwort))
+
+        chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
         chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
+
+        st.session_state.chat_history.append((user_input, antwort))
 
 if st.session_state.frage_schritt > 0:
     st.subheader("📋 Bitte beantworten Sie folgende Fragen:")
