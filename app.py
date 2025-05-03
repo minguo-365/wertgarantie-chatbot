@@ -118,7 +118,6 @@ for nutzer, bot in st.session_state.chat_history:
 
 user_input = st.chat_input("Ihre Frage eingeben:")
 if user_input:
-    st.chat_message("user").write(user_input)
     eingabe = user_input.strip().lower()
 
     if eingabe == "handyversicherung":
