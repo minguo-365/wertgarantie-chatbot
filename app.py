@@ -121,7 +121,7 @@ user_input = st.chat_input("Ihre Frage eingeben:")
 if user_input:
     eingabe = user_input.strip().lower()
 
-    if eingabe == "handyversicherung abschliessen":
+    if eingabe == "handyversicherung":
         st.session_state.frage_schritt += 1
 
     elif eingabe in ["hallo", "hi", "guten tag", "hey"]:
