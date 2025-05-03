@@ -142,10 +142,10 @@ if user_input:
 
         nachrichten = [
             {"role": "system", "content": (
-            "Du bist ein kompetenter deutscher Kundenservice-Chatbot für ein Versicherungsunternehmen. "
-            "Antworten bitte stets auf Deutsch, höflich und verständlich. Halte dich an technische und rechtliche Fakten, "
-            "aber sprich den Nutzer ruhig menschlich und freundlich an."
-          )}
+                "Du bist ein kompetenter deutscher Kundenservice-Chatbot für ein Versicherungsunternehmen. "
+                "Antworten bitte stets auf Deutsch, höflich und verständlich. Halte dich an technische und rechtliche Fakten, "
+                "aber sprich den Nutzer ruhig menschlich und freundlich an."
+            )}
         ] + verlauf + [
             {"role": "user", "content": f"Relevante Inhalte:\n{context_text}\n\nFrage: {user_input}"}
         ]
@@ -153,24 +153,57 @@ if user_input:
         chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
 
         antwort_placeholder = st.empty()
-        progress_bar = st.progress(0)
-
         antwort_placeholder.markdown(f"""
-        <div style='text-align: left; display: flex; margin: 10px 0;'>
-            <img src='{BOT_AVATAR}' style='width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;' />
-            <div style='background-color: #e0e0e0; padding: 10px 15px; border-radius: 10px; max-width: 80%;'>
-               ...
-            </div>
+        <div style="display: flex; align-items: center; margin: 10px 0;">
+          <img src="{BOT_AVATAR}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;" />
+          <div class="dot-flashing"></div>
         </div>
+
+        <style>
+        .dot-flashing {{
+          position: relative;
+          width: 10px;
+          height: 10px;
+          border-radius: 5px;
+          background-color: #999;
+          color: #999;
+          animation: dot-flashing 1s infinite linear alternate;
+        }}
+
+        .dot-flashing::before, .dot-flashing::after {{
+          content: "";
+          display: inline-block;
+          position: absolute;
+          top: 0;
+          width: 10px;
+          height: 10px;
+          border-radius: 5px;
+          background-color: #999;
+          color: #999;
+        }}
+
+        .dot-flashing::before {{
+          left: -15px;
+          animation: dot-flashing 1s infinite alternate;
+        }}
+
+        .dot-flashing::after {{
+          left: 15px;
+          animation: dot-flashing 1s infinite alternate;
+          animation-delay: 0.5s;
+        }}
+
+        @keyframes dot-flashing {{
+          0% {{ background-color: #ccc; }}
+          50% {{ background-color: #999; }}
+          100% {{ background-color: #ccc; }}
+        }}
+        </style>
         """, unsafe_allow_html=True)
 
-        for percent in range(50):
-            time.sleep(0.02)
-            progress_bar.progress((percent + 1))
-
+        
         antwort = frage_openrouter(nachrichten)
         antwort_placeholder.empty()
-        progress_bar.empty()
 
         chat_bubble(antwort, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
         st.session_state.chat_history.append((user_input, antwort))
