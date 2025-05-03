@@ -221,43 +221,44 @@ if st.session_state.frage_schritt > 0:
             st.rerun()
 
 if st.session_state.get("frage_schritt", 0) == 0 and not st.session_state.get("chat_history", []):
-    st.markdown("""---
-**Wählen Sie eine Kategorie:**
-""")
-   show_versicherung = st.toggle("Versicherung", key="toggle_versicherung")
-   show_werkstaetten = st.toggle("Werkstätten", key="toggle_werkstaetten")
-   show_haendler = st.toggle(“Fachhändler", key="toggle_haendler")
-   show_erstehilfe = st.toggle("Erste Hilfe", key="toggle_erstehilfe")
+    st.markdown("""
+    ---
+    **Wählen Sie eine Kategorie:**
+    """)
 
-if show_versicherung:
-    st.markdown("**Geräteversicherung auswählen:**")
-    col_a, col_b = st.columns(2)
-    with col_a:
-        if st.button("📱 Smartphone-Versicherung", key="sub1"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung/smartphone#/buchung/1", "show_link_smartphone")
-        if st.button("💻 Notebook-Versicherung", key="sub2"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/notebook", "show_link_notebook")
-    with col_b:
-        if st.button("📷 Kamera-Versicherung", key="sub3"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung/kamera#", "show_link_kamera")
-        if st.button("📺 Fernseher-Versicherung", key="sub4"):
-            link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher", "show_link_tv")
+    show_versicherung = st.toggle("Versicherung", key="toggle_versicherung")
+    show_werkstaetten = st.toggle("Werkstätten", key="toggle_werkstaetten")
+    show_haendler = st.toggle("Fachhändler", key="toggle_haendler")
+    show_erstehilfe = st.toggle("Erste Hilfe", key="toggle_erstehilfe")
 
-if show_werkstaetten:
-    link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche", "show_link_werkstatt")
+    if show_versicherung:
+        st.markdown("**📦 Geräteversicherung auswählen:**")
+        col_a, col_b = st.columns(2)
+        with col_a:
+            if st.button("📱 Smartphone-Versicherung", key="sub1"):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung/smartphone#/buchung/1", "show_link_smartphone")
+            if st.button("💻 Notebook-Versicherung", key="sub2"):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/notebook", "show_link_notebook")
+        with col_b:
+            if st.button("📷 Kamera-Versicherung", key="sub3"):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung/kamera#", "show_link_kamera")
+            if st.button("📺 Fernseher-Versicherung", key="sub4"):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher", "show_link_tv")
 
-if show_haendler:
-    link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
+    if show_werkstaetten:
+        link_mit_chat_und_link("", "https://www.wertgarantie.de/werkstattsuche", "show_link_werkstatt")
 
-if show_erstehilfe:
-    st.markdown("**Erste Hilfe auswählen:**")
-    col_c, col_d = st.columns(2)
-    with col_c:
-        if st.button("Handy Selbstreparatur", key="sub5"):
-            link_mit_chat_und_link("","https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren","show_link_ersteHilfe")
-        if st.button("Haushalt Selbstreparatur", key="sub6"):
-            link_mit_chat_und_link("","https://www.wertgarantie.de/ratgeber/elektronik/haushalt-garten/selbst-reparieren","show_link_haushaltSelbstreparatur")
+    if show_haendler:
+        link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
 
+    if show_erstehilfe:
+        st.markdown("**🛠️ Erste Hilfe auswählen:**")
+        col_c, col_d = st.columns(2)
+        with col_c:
+            if st.button("🔧 Handy Selbstreparatur", key="sub5"):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren", "show_link_ersteHilfe")
+            if st.button("🧼 Haushalt Selbstreparatur", key="sub6"):
+                link_mit_chat_und_link("", "https://www.wertgarantie.de/ratgeber/elektronik/haushalt-garten/selbst-reparieren", "show_link_haushaltSelbstreparatur")
                     
 #col4 = st.columns(1)[0]
 #col4, col5 = st.columns(2)
