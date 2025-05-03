@@ -279,7 +279,7 @@ if st.session_state.get("frage_schritt", 0) == 0 and not st.session_state.get("c
         st.markdown("**Wählen Sie die Erste Hilfe aus:**")
         col_c, col_d = st.columns(2)
         with col_c:
-            if st.button("📱 Handy Selbstreparatur", key="sub5"):
+            if st.button("Handy Selbstreparatur", key="sub5"):
                 link_mit_chat_und_link("","https://www.wertgarantie.de/ratgeber/elektronik/smartphone/selbst-reparieren","show_link_ersteHilfe")
             if st.button(" Haushalt Selbstreparatur", key="sub6"):
                 link_mit_chat_und_link("","https://www.wertgarantie.de/ratgeber/elektronik/haushalt-garten/selbst-reparieren","show_link_haushaltSelbstreparatur")
