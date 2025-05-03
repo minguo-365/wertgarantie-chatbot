@@ -131,42 +131,42 @@ if user_input:
         chat_bubble(willkommen, align="left", bgcolor="#F1F0F0", avatar_url=BOT_AVATAR)
 
     else:
-        verlauf = []
-        for frage, antwort in st.session_state.chat_history[-6:]:
-            if frage: verlauf.append({"role": "user", "content": frage})
-            verlauf.append({"role": "assistant", "content": antwort})
+    verlauf = []
+    for frage, antwort in st.session_state.chat_history[-6:]:
+        if frage:
+            verlauf.append({"role": "user", "content": frage})
+        verlauf.append({"role": "assistant", "content": antwort})
 
-        context = get_relevante_abschnitte(user_input)
-        context_text = "\n".join([c[0] for c in context])
+    context = get_relevante_abschnitte(user_input)
+    context_text = "\n".join([c[0] for c in context])
 
-        nachrichten = [
-            {"role": "system", "content": (
-                "Du bist ein kompetenter deutscher Kundenservice-Chatbot für ein Versicherungsunternehmen. "
-                "Antworten bitte stets auf Deutsch, höflich und verständlich. Halte dich an technische und rechtliche Fakten, "
-                "aber sprich den Nutzer ruhig menschlich und freundlich an."
-            )}
-        ] + verlauf + [
-            {"role": "user", "content": f"Relevante Inhalte:\n{context_text}\n\nFrage: {user_input}"}
-        ]
+    nachrichten = [
+        {"role": "system", "content": (
+            "Du bist ein kompetenter deutscher Kundenservice-Chatbot für ein Versicherungsunternehmen. "
+            "Antworten bitte stets auf Deutsch, höflich und verständlich. Halte dich an technische und rechtliche Fakten, "
+            "aber sprich den Nutzer ruhig menschlich und freundlich an."
+        )}
+    ] + verlauf + [
+        {"role": "user", "content": f"Relevante Inhalte:\n{context_text}\n\nFrage: {user_input}"}
+    ]
 
+    chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
 
-       chat_bubble(user_input, align="right", bgcolor="#DCF8C6", avatar_url=USER_AVATAR)
+    antwort_placeholder = st.empty()
+    progress_bar = st.progress(0)
 
-       antwort_placeholder = st.empty()
-       progress_bar = st.progress(0)
-
-       antwort_placeholder.markdown(f"""
-<div style='text-align: left; display: flex; margin: 10px 0;'>
-    <img src='{BOT_AVATAR}' style='width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;' />
-    <div style='background-color: #e0e0e0; padding: 10px 15px; border-radius: 10px; max-width: 80%;'>
-        ...
+    antwort_placeholder.markdown(f"""
+    <div style='text-align: left; display: flex; margin: 10px 0;'>
+        <img src='{BOT_AVATAR}' style='width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;' />
+        <div style='background-color: #e0e0e0; padding: 10px 15px; border-radius: 10px; max-width: 80%;'>
+            ...
+        </div>
     </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-     for percent in range(50):
-     time.sleep(0.02)
-     progress_bar.progress((percent + 1))
+    for percent in range(50):
+        time.sleep(0.02)
+        progress_bar.progress((percent + 1))
 
     antwort = frage_openrouter(nachrichten)
     antwort_placeholder.empty()
