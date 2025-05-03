@@ -269,7 +269,7 @@ if st.session_state.get("frage_schritt", 0) == 0 and not st.session_state.get("c
                 link_mit_chat_und_link("", "https://www.wertgarantie.de/versicherung#/fernseher", "show_link_tv")
 
 
-     if st.session_state.get('show_werkstaetten', False):
+    if st.session_state.get('show_werkstaetten', False):
         st.markdown('<meta http-equiv="refresh" content="0; URL=https://www.wertgarantie.de/werkstattsuche">', unsafe_allow_html=True)
 
     if st.session_state.get('show_haendler', False):
