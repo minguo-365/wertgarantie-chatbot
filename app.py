@@ -66,7 +66,8 @@ def train_glm_model():
 
 glm_model = train_glm_model()
 
-st.title("🧑‍💻 Wertgarantie Chatbot")
+st.image("wertgarantie_logo.jpeg", width=60)
+st.title("Wertgarantie Chatbot")
 
 if st.button("🗑️ Verlauf löschen"):
     st.session_state.clear()
