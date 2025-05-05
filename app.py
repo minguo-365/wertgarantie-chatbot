@@ -74,7 +74,7 @@ with col1:
     st.image("Bild.jpeg", width=100)  # Passe ggf. den Pfad oder Dateinamen an
 
 with col2:
-    st.markdown("### 👩‍💻 Wertgarantie Chatbot")  # kleinere, aber schöne Schriftgröße
+    st.markdown("### Wertgarantie Chatbot")  # kleinere, aber schöne Schriftgröße
 #st.image("Bild.jpeg", width=260)
 #st.markdown("<h4>Wertgarantie Chatbot</h4>", unsafe_allow_html=True)
 
