@@ -71,7 +71,7 @@ glm_model = train_glm_model()
 col1, col2 = st.columns([1, 6])  # Erste Spalte schmal für Bild, zweite breit für Text
 
 with col1:
-    st.image("Bild.jpeg", width=150)  # Passe ggf. den Pfad oder Dateinamen an
+    st.image("Bild.jpeg", width=200)  # Passe ggf. den Pfad oder Dateinamen an
 
 with col2:
     st.markdown("## Wertgarantie Chatbot")  # kleinere, aber schöne Schriftgröße
