@@ -66,7 +66,7 @@ def train_glm_model():
 
 glm_model = train_glm_model()
 
-st.image("Bild.jpeg", width=200)
+st.image("Bild.jpeg", width=260)
 #st.markdown("<h4>Wertgarantie Chatbot</h4>", unsafe_allow_html=True)
 
 
