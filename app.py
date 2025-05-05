@@ -319,7 +319,7 @@ if st.session_state.get("frage_schritt", 0) == 0 and not st.session_state.get("c
         link_mit_chat_und_link("", "https://www.wertgarantie.de/haendlersuche", "show_link_haendler")
 
     if show_erstehilfe:
-        st.markdown("**🛠Erste Hilfe auswählen:**")
+        st.markdown("**Erste Hilfe auswählen:**")
         col_c, col_d = st.columns(2)
         with col_c:
             if st.button("Handy Selbstreparatur", key="sub5"):
