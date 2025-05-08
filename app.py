@@ -31,23 +31,15 @@ def get_relevante_abschnitte(anfrage, k=3):
 
 def frage_openrouter(nachrichten):
     try:
+        # Direkter Aufruf des kostenlosen Modells
         response = client.chat.completions.create(
-            model="mistralai/mistral-7b-instruct",
+            model="mistralai/mistral-7b-instruct:free",  # Kostenlose Version
             messages=nachrichten
         )
-        return response.choices[0].message.content
+        return response.choices[0].message.content  # Gibt die generierte Antwort zurück
+    
     except Exception as e:
-        if "code': 402" in str(e).lower() or "insuffizien" in str(e).lower():
-            try:
-                response = client.chat.completions.create(
-                    model="mistralai/mistral-7b-instruct:free",
-                    messages=nachrichten
-                )
-                return response.choices[0].message.content
-            except Exception as e2:
-                return f"\u274c Auch das kostenlose Modell schlug fehl: {e2}"
-        else:
-            return f"\u274c OpenRouter Fehler: {e}"
+        return f"✘ Anfrage an kostenloses Modell fehlgeschlagen: {e}"  
 
 @st.cache_data
 def train_glm_model():
